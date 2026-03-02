@@ -1,0 +1,105 @@
+/* Pasir UI v1 - estilos globales compartidos */
+*{box-sizing:border-box}
+:root{
+  color-scheme: light dark;
+  --bg:#f3f4f6;
+  --bg-soft: radial-gradient(circle at top, rgba(59,130,246,0.12), transparent 55%);
+  --header: rgba(255,255,255,0.92);
+  --card:#ffffff;
+  --border: rgba(148,163,184,0.35);
+  --text:#0f172a;
+  --muted:#6b7280;
+  --accent:#10b981;
+  --accent2:#2563eb;
+  --shadow: 0 12px 28px rgba(15,23,42,0.10);
+  --r: 18px;
+  --pill: 999px;
+  --t: .18s ease-out;
+  --focus: 0 0 0 3px rgba(37,99,235,.25);
+}
+
+body[data-theme="dark"]{
+  --bg:#0b1220;
+  --bg-soft: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 55%);
+  --header: rgba(15,23,42,0.92);
+  --card: rgba(15,23,42,0.98);
+  --border: rgba(148,163,184,0.28);
+  --text:#f9fafb;
+  --muted:#9ca3af;
+  --shadow: 0 18px 45px rgba(15,23,42,0.85);
+}
+
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  background: var(--bg-soft), radial-gradient(circle at bottom, rgba(16,185,129,0.12), transparent 60%), var(--bg);
+  color: var(--text);
+}
+
+a{color:inherit}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit}
+:focus-visible{outline:none; box-shadow: var(--focus); border-color: rgba(37,99,235,.55) !important}
+
+/* Contenedores */
+.container{max-width:1100px;margin:0 auto;padding:16px}
+.card{
+  border:1px solid var(--border);
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+}
+
+/* Botones */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+  padding:.55rem .95rem;
+  border-radius: var(--pill);
+  border:1px solid transparent;
+  text-decoration:none;
+  font-weight:900;
+  font-size:.92rem;
+  cursor:pointer;
+  transition: transform var(--t), box-shadow var(--t), border-color var(--t), filter var(--t);
+  white-space:nowrap;
+}
+.btn:hover{transform: translateY(-1px)}
+.btn.primary{background: linear-gradient(135deg, #22c55e, #16a34a); color:#052e16; box-shadow: 0 10px 24px rgba(21,128,61,0.35);}
+.btn.secondary{background: transparent; border-color: var(--border); color: var(--text);}
+.btn.blue{background: linear-gradient(135deg, #2563eb, #1d4ed8); color:#eff6ff; box-shadow: 0 10px 24px rgba(37,99,235,.25);}
+
+/* Header base (si tu página lo usa) */
+.app-header{
+  position: sticky; top:0; z-index:30;
+  backdrop-filter: blur(14px);
+  background: var(--header);
+  border-bottom: 1px solid var(--border);
+}
+.app-header .inner{
+  max-width:1100px;margin:0 auto;
+  padding:.85rem 1rem;
+  display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;
+}
+.theme-toggle{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.45rem .85rem;border-radius: var(--pill);
+  border:1px solid var(--border);
+  background: rgba(148,163,184,0.10);
+  cursor:pointer;
+  font-weight:900;
+}
+
+/* Formularios */
+.field{
+  width:100%;
+  padding:12px 12px;
+  border-radius: 12px;
+  border:1px solid var(--border);
+  background: rgba(148,163,184,0.08);
+  color: var(--text);
+  outline:none;
+}
+body[data-theme="dark"] .field{ background: rgba(2,6,23,.55); }
+
+.muted{color: var(--muted)}
