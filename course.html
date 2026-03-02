@@ -854,128 +854,44 @@ function escapeHtml_(s){
 </script>
 
 
+
+
+
 <script>
-  // ===== Tema global (igual que index) =====
+  // ===== Tema global (igual que index) - robusto =====
   (function(){
-    const themeMeta = document.getElementById("theme-color-meta");
-    const btn = document.getElementById("theme-toggle");
-    const icon = document.getElementById("theme-icon");
-    const label = document.getElementById("theme-label");
+    function init(){
+      const themeMeta = document.getElementById("theme-color-meta");
+      const btn = document.getElementById("theme-toggle");
+      const icon = document.getElementById("theme-icon");
+      const label = document.getElementById("theme-label");
 
-    function setTheme(theme){
-      document.body.setAttribute("data-theme", theme);
-      const dark = theme === "dark";
-      if (icon) icon.textContent = dark ? "🌙" : "☀️";
-      if (label) label.textContent = dark ? "Modo oscuro" : "Modo claro";
-      if (themeMeta) themeMeta.setAttribute("content", dark ? "#0b1220" : "#f3f4f6");
-      localStorage.setItem("pasir-theme", theme);
+      function setTheme(theme){
+        document.body.setAttribute("data-theme", theme);
+        const dark = theme === "dark";
+        if (icon) icon.textContent = dark ? "🌙" : "☀️";
+        if (label) label.textContent = dark ? "Modo oscuro" : "Modo claro";
+        if (themeMeta) themeMeta.setAttribute("content", dark ? "#0b1220" : "#f3f4f6");
+        try { localStorage.setItem("pasir-theme", theme); } catch(e) {}
+      }
+
+      let saved = null;
+      try { saved = localStorage.getItem("pasir-theme"); } catch(e) {}
+      setTheme(saved === "dark" ? "dark" : "light");
+
+      if (btn){
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const current = document.body.getAttribute("data-theme");
+          setTheme(current === "dark" ? "light" : "dark");
+        });
+      }
     }
 
-    const saved = localStorage.getItem("pasir-theme");
-    setTheme(saved === "dark" ? "dark" : "light");
-
-    if (btn){
-      btn.addEventListener("click", () => {
-        const current = document.body.getAttribute("data-theme");
-        setTheme(current === "dark" ? "light" : "dark");
-      });
-    }
-  })();
-</script>
-
-</body>
-</html>
-
-
-<script>
-(function(){
-  const token = sessionStorage.getItem("pasir_token");
-  const userMenu = document.getElementById("userMenu");
-  const userTrigger = document.getElementById("userTrigger");
-  const userDropdown = document.getElementById("userDropdown");
-  const userNameEl = document.getElementById("userName");
-
-  // Toggle dropdown
-  function closeMenu(){
-    if (!userDropdown) return;
-    userDropdown.classList.remove("open");
-    if (userTrigger) userTrigger.setAttribute("aria-expanded","false");
-  }
-  function openMenu(){
-    if (!userDropdown) return;
-    userDropdown.classList.add("open");
-    if (userTrigger) userTrigger.setAttribute("aria-expanded","true");
-  }
-  if (userTrigger && userDropdown){
-    userTrigger.addEventListener("click", (e)=>{
-      e.stopPropagation();
-      userDropdown.classList.contains("open") ? closeMenu() : openMenu();
-    });
-    document.addEventListener("click", ()=> closeMenu());
-    document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeMenu(); });
-    userDropdown.addEventListener("click", (e)=> e.stopPropagation());
-  }
-
-  // Fill name (uses jsonp() already defined in this page)
-  if (token && userMenu) userMenu.style.display = "inline-block";
-
-  async function hydrateUser(){
-    const storedName = sessionStorage.getItem("pasir_email");
-    if (storedName && userNameEl) userNameEl.textContent = storedName;
-    if (!token) return;
-    try{
-      const r = await jsonp("me", { token });
-      if (!r.ok) return;
-      const email = (r.user && (r.user.email || r.user.correo)) || r.email || sessionStorage.getItem("pasir_email") || "—";
-      const label = email;
-
-      if (userNameEl) userNameEl.textContent = label;
-      sessionStorage.setItem("pasir_email", label);
-      if (userMenu) userMenu.style.display = "inline-block";
-    }catch(e){}
-  }
-  hydrateUser();
-
-  // Logout (keep behavior: clear token and go to index)
-  const logoutBtn = document.getElementById("logout");
-  if (logoutBtn){
-    logoutBtn.addEventListener("click", (e)=>{
-      e.preventDefault();
-      sessionStorage.removeItem("pasir_token");
-      sessionStorage.removeItem("pasir_email");
-      sessionStorage.removeItem("pasir_name");
-      location.href = "index.html";
-    });
-  }
-})();
-</script>
-
-
-<script>
-  // ===== Tema global (igual que index) =====
-  (function(){
-    const themeMeta = document.getElementById("theme-color-meta");
-    const btn = document.getElementById("theme-toggle");
-    const icon = document.getElementById("theme-icon");
-    const label = document.getElementById("theme-label");
-
-    function setTheme(theme){
-      document.body.setAttribute("data-theme", theme);
-      const dark = theme === "dark";
-      if (icon) icon.textContent = dark ? "🌙" : "☀️";
-      if (label) label.textContent = dark ? "Modo oscuro" : "Modo claro";
-      if (themeMeta) themeMeta.setAttribute("content", dark ? "#0b1220" : "#f3f4f6");
-      localStorage.setItem("pasir-theme", theme);
-    }
-
-    const saved = localStorage.getItem("pasir-theme");
-    setTheme(saved === "dark" ? "dark" : "light");
-
-    if (btn){
-      btn.addEventListener("click", () => {
-        const current = document.body.getAttribute("data-theme");
-        setTheme(current === "dark" ? "light" : "dark");
-      });
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init, { once:true });
+    } else {
+      init();
     }
   })();
 </script>
