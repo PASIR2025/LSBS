@@ -6,52 +6,53 @@
   <title>Curso</title>
 <meta name="theme-color" id="theme-color-meta" content="#f3f4f6"/>
 <style>
-
-/* ===== Overlay Play propio (azul profesional) ===== */
-.player-wrap{position:relative;}
+    
+/* ===== Overlay Play azul (encima del logo de YouTube) ===== */
 .start-overlay{
-  position:absolute; inset:0;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
+  position:absolute;
+  inset:0;
+  z-index: 90;            /* encima de tap-shield (50) y controles (60) */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
   gap:12px;
-  z-index:60;
   pointer-events:auto;
-  background:linear-gradient(to bottom, rgba(15,23,42,.22), rgba(15,23,42,.10));
-}
-body[data-theme="light"] .start-overlay{
-  background:linear-gradient(to bottom, rgba(15,23,42,.10), rgba(15,23,42,.04));
+  background: linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.06));
 }
 .start-play{
-  width:86px; height:86px;
+  width:92px;
+  height:92px;
   border-radius:999px;
   border:0;
-  cursor:pointer;
   background:#2563eb;
-  box-shadow:0 14px 28px rgba(37,99,235,.35);
-  display:flex; align-items:center; justify-content:center;
-  transition:transform .15s ease-out, filter .15s ease-out;
+  box-shadow:0 18px 40px rgba(37,99,235,.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform .15s ease, filter .15s ease;
 }
-.start-play:hover{transform:translateY(-1px); filter:brightness(1.05);}
-.start-play:active{transform:translateY(0px) scale(.98);}
+.start-play:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+.start-play:active{ transform: scale(.98); }
 .start-play .tri{
-  width:0; height:0;
-  border-top:14px solid transparent;
-  border-bottom:14px solid transparent;
-  border-left:22px solid #fff;
-  margin-left:4px;
+  width:0;height:0;
+  border-top:15px solid transparent;
+  border-bottom:15px solid transparent;
+  border-left:24px solid #fff;
+  margin-left:5px;
 }
 .start-hint{
   font-weight:900;
-  color:var(--text);
+  color: var(--text);
+  opacity:.90;
   text-align:center;
-  max-width:min(520px, 92vw);
-  padding:0 12px;
-  text-shadow:0 2px 12px rgba(0,0,0,.15);
-  opacity:.92;
+  padding:0 14px;
+  text-shadow: 0 2px 14px rgba(0,0,0,.25);
 }
+.start-overlay.is-hidden{ display:none !important; }
 
-
-    :root{
+:root{
       --bg:#0b1220;
       --panel:rgba(255,255,255,.06);
       --panel2:rgba(255,255,255,.04);
@@ -446,18 +447,19 @@ header{background:var(--panel) !important;}
     <section class="player-wrap" aria-label="Reproductor">
       <div class="player">
         <div id="player" class="yt-player"></div>
-    <!-- Overlay inicial: Botón Play propio (azul) -->
-    <div id="startOverlay" class="start-overlay" style="display:flex;">
-      <button id="startPlayBtn" class="start-play" type="button" aria-label="Iniciar reproducción">
-        <span class="tri"></span>
-      </button>
-      <div id="startHint" class="start-hint">Selecciona un módulo para comenzar</div>
-    </div>
-
 
 <div id="tapShield" class="tap-shield" aria-label="Zona protegida del video"></div>
 
-      </div>
+      
+
+<div id="startOverlay" class="start-overlay" aria-label="Iniciar reproducción">
+  <button id="startPlayBtn" class="start-play" type="button" aria-label="Reproducir">
+    <span class="tri" aria-hidden="true"></span>
+  </button>
+  <div id="startHint" class="start-hint">Toca un módulo o presiona Play</div>
+</div>
+
+</div>
       <div class="player-meta">
         <div class="left">
           <div class="now" id="nowTitle">Reproduciendo</div>
@@ -499,9 +501,10 @@ header{background:var(--panel) !important;}
 let YTPlayer = null;
 let YTReady = false;
 let pendingVideoId = null;
-let selectedVideoId = null;
-let pendingPlayOnReady = false;
 let videoLoadedFlag = false;
+let selectedVideoId = null;
+let firstModuleVideoId = null;
+let pendingAutoplay = false;
 
 function fmtTime_(sec){
   sec = Math.max(0, Math.floor(sec || 0));
@@ -531,18 +534,12 @@ function loadVideoById_(videoId, autoplay){
   const vid = normalizeVideoId_(videoId);
   if (!vid) return;
   selectedVideoId = vid;
-
-  if (YTReady && YTPlayer){
-    try{
-      if (!autoplay && typeof YTPlayer.cueVideoById === "function"){
-        YTPlayer.cueVideoById({ videoId: vid, startSeconds: 0 });
-      } else if (typeof YTPlayer.loadVideoById === "function"){
-        YTPlayer.loadVideoById({ videoId: vid, startSeconds: 0 });
-      }
-      if (autoplay && typeof YTPlayer.playVideo === "function") YTPlayer.playVideo();
-    }catch(e){}
+  if (YTReady && YTPlayer && typeof YTPlayer.loadVideoById === "function"){
+    YTPlayer.loadVideoById({ videoId: vid, startSeconds: 0 });
+    if (autoplay) YTPlayer.playVideo();
   } else {
     pendingVideoId = vid;
+    pendingAutoplay = !!autoplay;
   }
 }
 
@@ -643,21 +640,34 @@ window.onYouTubeIframeAPIReady = function(){
       onReady: () => {
         setupControls_();
         if (pendingVideoId){
-          loadVideoById_(pendingVideoId, false);
+          const auto = pendingAutoplay;
+          loadVideoById_(pendingVideoId, auto);
           pendingVideoId = null;
-        }
-        if (pendingPlayOnReady && YTPlayer && typeof YTPlayer.playVideo === "function"){
-          try{ YTPlayer.playVideo(); }catch(e){}
-          pendingPlayOnReady = false;
+          pendingAutoplay = false;
         }
       },
       onStateChange: (e) => {
         const btn = document.getElementById("ccPlay");
-        if (!btn) return;
-        if (e.data === 1) btn.textContent = "⏸";
-        else btn.textContent = "▶";
+        if (btn){
+          if (e.data === 1) btn.textContent = "⏸";
+          else btn.textContent = "▶";
+        }
+        // ===== Overlay según estado =====
+        const ov = document.getElementById("startOverlay");
+        const hint = document.getElementById("startHint");
+        if (ov){
+          if (e.data === 1){
+            ov.classList.add("is-hidden");
+          } else if (e.data === 0){
+            ov.classList.remove("is-hidden");
+            if (hint) hint.textContent = "Clase finalizada. Presiona Play";
+          } else if (e.data === -1 || e.data === 5 || e.data === 2){
+            ov.classList.remove("is-hidden");
+            if (hint) hint.textContent = selectedVideoId ? "Presiona Play" : "Toca un módulo o presiona Play";
+          }
+        }
       }
-    }
+}
   });
 };
 
@@ -773,6 +783,7 @@ function escapeHtml_(s){
       const b = document.createElement("button");
       b.className = "mod";
       const videoId = (m.videoId) || (m.embedUrl || "").split("/embed/")[1]?.split("?")[0] || "";
+      if (idx === 0 && videoId) firstModuleVideoId = videoId;
       const thumb = videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : "icons/icon-192.png";
       b.innerHTML = `
         <div class="thumb"><img src="${thumb}" alt=""></div>
@@ -787,8 +798,8 @@ function escapeHtml_(s){
         loadVideoById_(videoId, false);
         const ov = document.getElementById("startOverlay");
         const hint = document.getElementById("startHint");
-        if (ov) ov.style.display = "flex";
-        if (hint) hint.textContent = "Presiona ▶ para iniciar";
+        if (ov) ov.classList.remove("is-hidden");
+        if (hint) hint.textContent = "Presiona Play";
         document.getElementById("nowPlaying").textContent = "Reproduciendo: " + m.title;
         const nt = document.getElementById("nowTitle"); if (nt) nt.textContent = m.title;
         const yt = document.getElementById("openYT");
@@ -800,20 +811,7 @@ function escapeHtml_(s){
       box.appendChild(b);
       // autoplay eliminado: el alumno debe presionar play manualmente
     });
-  
-    // ===== Preseleccionar primera clase (sin autoplay) =====
-    try{
-      if (!selectedVideoId && Array.isArray(r.modules) && r.modules.length){
-        const first = r.modules[0];
-        const firstVid = (first.videoId) || (first.embedUrl || \"\").split(\"/embed/\")[1]?.split(\"?\")[0] || \"\";
-        if (firstVid){
-          loadVideoById_(firstVid, false);
-          const hint = document.getElementById(\"startHint\");
-          if (hint) hint.textContent = \"Presiona ▶ para iniciar la primera clase\";
-        }
-      }
-    }catch(e){}
-})().catch(err => {
+  })().catch(err => {
     showError(err.message || String(err));
   });
 </script>
@@ -941,50 +939,53 @@ function escapeHtml_(s){
 
 
 
+
 <script>
-  
-  // ===== Botón Play grande (overlay) =====
-  (function(){
-    const startBtn = document.getElementById("startPlayBtn");
-    const startOv = document.getElementById("startOverlay");
-    const startHint = document.getElementById("startHint");
+/* ===== Botón Play azul: reproduce 1ra clase o la seleccionada ===== */
+(function(){
+  const ov = document.getElementById("startOverlay");
+  const btn = document.getElementById("startPlayBtn");
+  const hint = document.getElementById("startHint");
 
-    function playSelected(){
-      if (!selectedVideoId){
-        if (startHint) startHint.textContent = "Primero selecciona un módulo";
-        return;
-      }
-      if (window.__showCustomControls) window.__showCustomControls();
-      if (YTReady && YTPlayer && typeof YTPlayer.playVideo === "function"){
-        try{ YTPlayer.playVideo(); }catch(e){}
-      } else {
-        pendingPlayOnReady = true;
-        pendingVideoId = selectedVideoId;
-        // Asegurar carga de la API / player
-        try{ ensureYT_(); }catch(e){}
-      }
+  function playTarget(){
+    const vid = selectedVideoId || firstModuleVideoId;
+    if (!vid){
+      if (hint) hint.textContent = "Primero selecciona un módulo";
+      return;
     }
+    videoLoadedFlag = true;
+    if (window.__showCustomControls) window.__showCustomControls();
 
-    if (startBtn){
-      startBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        playSelected();
-      }, {passive:false});
+    // Autoplay SOLO por acción del usuario (click)
+    if (YTReady && YTPlayer){
+      try{ loadVideoById_(vid, true); }catch(e){}
+    } else {
+      pendingVideoId = vid;
+      pendingAutoplay = true;
+      ensureYT_();
     }
+  }
 
-    // Esconder overlay cuando está reproduciendo, mostrarlo cuando está en pausa/cue
-    window.__setOverlayVisible = function(visible, msg){
-      if (!startOv) return;
-      startOv.style.display = visible ? "flex" : "none";
-      if (visible && startHint && msg) startHint.textContent = msg;
-    };
+  if (btn){
+    btn.addEventListener("click", (e)=>{
+      e.preventDefault();
+      e.stopPropagation();
+      playTarget();
+    }, {passive:false});
+  }
+  if (ov){
+    ov.addEventListener("click", (e)=>{
+      if (e.target && (e.target.id === "startPlayBtn" || (e.target.closest && e.target.closest("#startPlayBtn")))) return;
+      e.preventDefault();
+      e.stopPropagation();
+      playTarget();
+    }, {passive:false});
+  }
+})();
+</script>
 
-    window.__playSelected = playSelected;
-  })();
-
-
-// ===== Tema global (igual que index) - robusto =====
+<script>
+  // ===== Tema global (igual que index) - robusto =====
   (function(){
     function init(){
       const themeMeta = document.getElementById("theme-color-meta");
