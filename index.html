@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pasir Industrial – Productos</title>
+<meta content="Pasir Industrial: manuales, clases grabadas y apps de electricidad y automatización. Compra por WhatsApp." name="description"/>
+<meta content="#f3f4f6" id="theme-color-meta" name="theme-color"/>
+<style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      color-scheme: dark light;
+      --bg:#f3f4f6;
+      --bg-soft: radial-gradient(circle at top, rgba(59,130,246,0.12), transparent 55%);
+      --header: rgba(255,255,255,0.92);
+      --card:#ffffff;
+      --border: rgba(148,163,184,0.35);
+      --text:#0f172a;
+      --muted:#6b7280;
+      --accent:#10b981;
+      --accent2:#2563eb;
+      --shadow: 0 12px 28px rgba(15,23,42,0.10);
+      --r: 18px;
+      --pill: 999px;
+      --t: .18s ease-out;
+    }
+    body[data-theme="dark"]{
+      --bg:#0b1220;
+      --bg-soft: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 55%);
+      --header: rgba(15,23,42,0.92);
+      --card: rgba(15,23,42,0.98);
+      --border: rgba(148,163,184,0.28);
+      --text:#f9fafb;
+      --muted:#9ca3af;
+      --shadow: 0 18px 45px rgba(15,23,42,0.85);
+    }
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      background: var(--bg-soft), radial-gradient(circle at bottom, rgba(16,185,129,0.12), transparent 60%), var(--bg);
+      color: var(--text);
+      min-height:100vh;
+    }
+    header{
+      position: sticky; top:0; z-index:20;
+      backdrop-filter: blur(14px);
+      background: var(--header);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner{
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: .85rem 1rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:.75rem;
+      flex-wrap:wrap;
+    }
+    .brand{display:flex;align-items:center;gap:.75rem}
+    .brand img{width:44px;height:44px;border-radius:999px;border:1px solid var(--border);object-fit:cover;background:#0f172a}
+    .brand .txt{display:flex;flex-direction:column;gap:.15rem}
+    .brand h1{font-size:1.2rem;font-weight:800;letter-spacing:.01em}
+    .brand p{font-size:.86rem;color:var(--muted)}
+    .right{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+    .toggle{
+      display:inline-flex;align-items:center;gap:.4rem;
+      padding:.45rem .9rem;border-radius:var(--pill);
+      border:1px solid var(--border);
+      background: rgba(148,163,184,0.10);
+      cursor:pointer;
+      transition: transform var(--t), border-color var(--t);
+      font-weight:700;
+      font-size:.85rem;
+    }
+    .toggle:hover{transform: translateY(-1px); border-color: rgba(37,99,235,.6)}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+      padding:.55rem .95rem;
+      border-radius: var(--pill);
+      border: 1px solid transparent;
+      text-decoration:none;
+      font-weight:800;
+      font-size:.9rem;
+      cursor:pointer;
+      transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+      white-space:nowrap;
+    }
+    .btn:hover{transform: translateY(-1px)}
+    .btn.whatsapp{
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #052e16;
+      box-shadow: 0 10px 24px rgba(21,128,61,0.35);
+    }
+    .btn.secondary{background: transparent;border-color: var(--border);color: var(--text);}
+    .wa-ico{width:18px;height:18px;display:block}
+
+    main{max-width:1050px;margin:1.25rem auto 2.75rem;padding:0 1rem}
+    .hero{
+      border:1px solid var(--border);
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 1.1rem 1.1rem 1.2rem;
+    }
+    .hero h2{font-size:1.25rem;margin-bottom:.35rem}
+    .hero p{color:var(--muted);font-size:.95rem;line-height:1.45}
+    .pricebar{
+      margin-top:.75rem;
+      padding:.75rem .9rem;
+      border-radius: var(--r);
+      border:1px dashed rgba(37,99,235,0.35);
+      background: rgba(37,99,235,0.06);
+      color: var(--muted);
+      font-size:.92rem;
+      line-height:1.35;
+    }
+    .hero .quick{margin-top:.9rem;display:flex;gap:.55rem;flex-wrap:wrap;}
+    .chip{
+      display:inline-flex;align-items:center;gap:.4rem;
+      padding:.42rem .75rem;border-radius: var(--pill);
+      border:1px solid var(--border);
+      background: rgba(148,163,184,0.10);
+      text-decoration:none;
+      font-weight:750;
+      color: var(--text);
+      font-size:.86rem;
+    }
+
+    .section{margin-top:1.35rem}
+    .section-head{margin-bottom:.8rem}
+    
+.section-head h2{
+  font-size:1.8rem;
+  font-weight:900;
+  letter-spacing:.3px;
+  margin:0 0 .25rem 0;
+}
+.section-head p{margin:0}
+
+.btn .btn-price{
+  font-weight:800;
+  margin-left:.35rem;
+  white-space:nowrap;
+  font-size:.95em;
+}
+.card-actions .price,
+.card-body .price{
+  display:none;
+}
+.section h2{font-size:1.1rem;display:flex;align-items:center;gap:.45rem}
+    .section h2::before{content:""; width:4px; height:1.05rem; border-radius:999px;background: linear-gradient(180deg, var(--accent2), var(--accent));}
+    .section p{color:var(--muted);font-size:.92rem;margin-top:.35rem;line-height:1.4}
+    .grid{display:grid;grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));gap: 1rem;}
+    .card{
+      border:1px solid var(--border);
+      background: var(--card);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height: 340px;
+      transition: transform var(--t), border-color var(--t);
+    }
+    .card:hover{transform: translateY(-2px); border-color: rgba(37,99,235,0.45)}
+    
+
+/* =========================
+   SECCIONES MÁS DIFERENCIADAS
+   ========================= */
+
+/* Caja de sección completa */
+.section{
+  margin-top: 1.35rem;
+  padding: 1rem;
+  border-radius: calc(var(--r) + 6px);
+  border: 2px solid rgba(148,163,184,0.45);
+  background: linear-gradient(180deg, rgba(148,163,184,0.10), rgba(148,163,184,0.04));
+  box-shadow: 0 10px 26px rgba(15,23,42,0.08);
+  position: relative;
+}
+
+/* Barra lateral de color (se cambia por sección) */
+.section::before{
+  content:"";
+  position:absolute;
+  left: 10px;
+  top: 12px;
+  bottom: 12px;
+  width: 6px;
+  border-radius: 999px;
+  background: var(--sec-accent, linear-gradient(180deg, var(--accent2), var(--accent)));
+  opacity: .95;
+}
+
+/* Acomodo del contenido para que no choque con la barra */
+.section-head, .grid, .bundle{
+  margin-left: 14px;
+}
+
+/* Head más “pro” */
+.section-head{
+  padding: .6rem .75rem .8rem;
+  border-radius: calc(var(--r) - 6px);
+  border: 1px solid rgba(148,163,184,0.35);
+  background: rgba(255,255,255,0.55);
+}
+body[data-theme="dark"] .section-head{
+  background: rgba(15,23,42,0.55);
+}
+
+/* Cards con borde más fuerte para que NO se mezclen */
+.card{
+  border: 2px solid rgba(148,163,184,0.45);
+  box-shadow: 0 12px 28px rgba(15,23,42,0.10);
+}
+.card:hover{
+  border-color: rgba(37,99,235,0.65);
+}
+
+/* Separador suave dentro de cada card (opcional pero ayuda) */
+.card-body{
+  border-top: 1px solid rgba(148,163,184,0.25);
+}
+
+/* =========================
+   COLORES POR SECCIÓN (IDs)
+   ========================= */
+#manuales{ --sec-accent: linear-gradient(180deg, #2563eb, #10b981); }
+#en-vivo{  --sec-accent: linear-gradient(180deg, #ef4444, #f59e0b); }
+#clases{   --sec-accent: linear-gradient(180deg, #8b5cf6, #2563eb); }
+#apps{     --sec-accent: linear-gradient(180deg, #22c55e, #06b6d4); }
+
+/* Fondo suave por sección (opcional, queda elegante) */
+#manuales{ background: linear-gradient(180deg, rgba(37,99,235,0.08), rgba(16,185,129,0.05)); }
+#en-vivo{  background: linear-gradient(180deg, rgba(239,68,68,0.10), rgba(245,158,11,0.06)); }
+#clases{   background: linear-gradient(180deg, rgba(139,92,246,0.10), rgba(37,99,235,0.06)); }
+#apps{     background: linear-gradient(180deg, rgba(34,197,94,0.10), rgba(6,182,212,0.06)); }
+
+/* Ajuste móvil: menos padding para que no “apriete” */
+@media (max-width: 520px){
+  .section{ padding: .85rem; }
+  .section::before{ left: 8px; top: 10px; bottom: 10px; }
+  .section-head, .grid, .bundle{ margin-left: 12px; }
+}
+
+.thumb{width:100%;height:155px;object-fit:cover;background:#0f172a}
+    .card-body{padding: .85rem .95rem .65rem; display:flex; flex-direction:column; gap:.45rem}
+    .tag{
+      align-self:flex-start;
+      font-size:.76rem;
+      font-weight:800;
+      padding:.18rem .55rem;
+      border-radius: var(--pill);
+      border:1px solid rgba(37,99,235,0.30);
+      background: rgba(37,99,235,0.10);
+      color: var(--text);
+    }
+    .card h3{font-size:1rem; font-weight:850; letter-spacing:-.01em}
+    .price{
+      font-weight:900;
+      font-size:.95rem;
+      padding:.2rem .6rem;
+      border-radius: var(--pill);
+      border:1px solid rgba(16,185,129,0.25);
+      background: rgba(16,185,129,0.10);
+      width: fit-content;
+    }
+    .desc{color:var(--muted); font-size:.92rem; line-height:1.35}
+    .card-actions{margin-top:auto; padding: .75rem .95rem .95rem; display:flex; gap:.55rem; flex-wrap:wrap}
+    .btns-row{display:flex; gap:.55rem; flex-wrap:wrap}
+
+    .bundle{
+      margin-top: 1rem;
+      border: 1px solid rgba(16,185,129,0.35);
+      background: linear-gradient(135deg, rgba(16,185,129,0.10), rgba(37,99,235,0.08));
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: .95rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: .8rem;
+      flex-wrap: wrap;
+    }
+    .bundle-title{font-size:1rem; font-weight:950; letter-spacing:-.01em}
+    .bundle-price{margin-top:.25rem; font-weight:950}
+    .bundle-desc{margin-top:.25rem; color:var(--muted); font-size:.92rem; line-height:1.35}
+    .bundle-actions{display:flex; gap:.55rem; flex-wrap:wrap; align-items:center; justify-content:flex-end}
+
+    .how{margin-top:1.35rem;border:1px solid var(--border);background: var(--card);border-radius: var(--r);box-shadow: var(--shadow);padding: 1rem 1.05rem;}
+    .how ol{margin-top:.55rem; padding-left: 1.1rem;}
+    .how li{margin:.25rem 0;}
+    .how small{display:block; margin-top:.55rem; color:var(--muted); line-height:1.35}
+    footer{text-align:center; padding:1.3rem 1rem 2rem; color:var(--muted); font-size:.85rem}
+    .float-wa{position:fixed; right:16px; bottom:16px; z-index:60;border-radius: var(--pill);padding:.7rem .9rem;text-decoration:none;background: linear-gradient(135deg, #22c55e, #16a34a);color:#052e16;font-weight:900;box-shadow: 0 18px 45px rgba(15,23,42,0.25);border:1px solid rgba(21,128,61,0.35);}
+  
+
+    .currency-wrap{display:flex;align-items:center;gap:.45rem;padding:.35rem .55rem;border:1px solid var(--border);border-radius:var(--pill);background: rgba(148,163,184,0.10);}
+    .currency-label{font-weight:800;font-size:.82rem;color:var(--muted)}
+    .currency-select{
+      border:none; outline:none; background:transparent; color:var(--text);
+      font-weight:900; font-size:.88rem; cursor:pointer;
+      padding:.2rem .25rem;
+    }
+    .price-part{display:inline-flex;gap:.35rem;align-items:baseline}
+
+    .temario{margin-top:.35rem;padding-left:1.1rem;color:var(--muted);font-size:.9rem;line-height:1.35}
+    .temario li{margin:.18rem 0}
+
+    /* --- Header compacto: iconos (moneda / tema) a la izquierda --- */
+    .left{display:flex; align-items:center; gap:.7rem; flex-wrap:wrap}
+    .top-left-controls{position:relative; display:flex; align-items:center; gap:.4rem}
+    .iconbtn{
+      width:38px; height:38px;
+      border-radius: var(--pill);
+      border:1px solid var(--border);
+      background: rgba(148,163,184,0.10);
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      font-size:1.05rem;
+      transition: transform var(--t), border-color var(--t);
+    }
+    .iconbtn:hover{transform: translateY(-1px); border-color: rgba(37,99,235,.6)}
+    .currency-pop{
+      position:absolute;
+      left:0;
+      top:44px;
+      padding:.45rem;
+      border-radius: 14px;
+      background: var(--header);
+      border:1px solid var(--border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      display:none;
+      z-index:50;
+    }
+    .currency-pop.show{display:block}
+    .currency-select{
+      min-width:190px;
+      border:1px solid var(--border);
+      border-radius: 12px;
+      padding:.45rem .6rem;
+      background: rgba(148,163,184,0.10);
+      color: var(--text);
+      font-weight:900;
+      outline:none;
+    }
+    .sr-only{
+      position:absolute;
+      width:1px; height:1px;
+      padding:0; margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+    /* chips más compactos */
+    .chip{padding:.34rem .6rem; font-size:.82rem}
+
+    /* ===== Curso en vivo: Badge + Contador ===== */
+    .live-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:.4rem;
+      padding:.28rem .65rem;
+      border-radius: var(--pill);
+      font-weight:950;
+      font-size:.78rem;
+      letter-spacing:.2px;
+      border:1px solid rgba(245,158,11,0.55);
+      background: rgba(245,158,11,0.16);
+      box-shadow: 0 10px 24px rgba(245,158,11,0.20);
+      margin-top:.15rem;
+      width: fit-content;
+      animation: livePulse 1.6s ease-in-out infinite;
+    }
+    .live-dot{
+      width:10px;height:10px;border-radius:999px;
+      background: #f59e0b;
+      box-shadow: 0 0 0 rgba(245,158,11,0.65);
+      animation: liveDot 1.6s ease-in-out infinite;
+      flex: 0 0 auto;
+    }
+    @keyframes livePulse{
+      0%,100%{transform: translateY(0); }
+      50%{transform: translateY(-1px); }
+    }
+    @keyframes liveDot{
+      0%{ box-shadow: 0 0 0 0 rgba(245,158,11,0.65); }
+      70%{ box-shadow: 0 0 0 10px rgba(245,158,11,0); }
+      100%{ box-shadow: 0 0 0 0 rgba(245,158,11,0); }
+    }
+
+    .countdown{
+      margin-top:.55rem;
+      border:1px dashed rgba(239,68,68,0.45);
+      background: rgba(239,68,68,0.08);
+      border-radius: calc(var(--r) - 6px);
+      padding:.6rem .7rem;
+    }
+    .countdown .lbl{
+      font-weight:950;
+      font-size:.82rem;
+      letter-spacing:.2px;
+      margin-bottom:.25rem;
+    }
+    .countdown .time{
+      display:flex;
+      gap:.45rem;
+      flex-wrap:wrap;
+      align-items:baseline;
+      font-weight:950;
+    }
+    .cd-box{
+      display:inline-flex;
+      align-items:baseline;
+      gap:.25rem;
+      padding:.35rem .55rem;
+      border-radius: 14px;
+      border:1px solid rgba(148,163,184,0.35);
+      background: rgba(148,163,184,0.10);
+    }
+    .cd-num{ font-size:1.05rem; }
+    .cd-unit{ font-size:.75rem; color: var(--muted); font-weight:850; }
+
+</style>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b1220">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="app.css">
+<script src="theme.js" defer></script>
+</head>
+<body data-theme="light">
+
+<header class="app-header">
+  <div class="container">
+    <div class="row">
+      <div class="brand" role="banner">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Pasir Academy</span>
+      </div>
+      <div class="nav-actions">
+</div>
+    </div>
+  </div>
+</header>
+
+<main class="page"><div class="container">
+<header>
+<div class="header-inner">
+  <div class="right">
+   
+    <div class="brand">
+<img alt="Logo Pasir Industrial" src="img/logo-pasir.png"/>
+<div class="txt">
+<h1>Pasir Industrial</h1>
+<p>Escuela Técnica Online</p>
+</div>
+  </div>
+
+  <div class="right">
+    <a class="chip" href="#manuales">📘 Manuales</a> <a class="chip" href="#en-vivo">🔴 Curso en vivo</a> <a class="chip" href="#clases">🎓 Clases grabadas</a> <a class="chip" href="#apps">📱 Apps</a> <a class="chip" id="loginChip" href="login.html">🔐 Iniciar sesión</a> <a class="chip" id="accountChip" href="account.html">📚 Mis cursos</a>
+  
+  <div class="top-left-controls">
+    <button class="iconbtn" id="currency-btn" type="button" aria-label="Cambiar moneda">💱</button>
+    <div class="currency-pop" id="currency-pop">
+      <select class="currency-select" id="currency-select"></select>
+    </div>
+</div>
+
+  <button id="installBtn" style="display:none;position:fixed;right:16px;bottom:16px;z-index:9999;padding:12px 14px;border-radius:14px;background:#22c55e;color:#04100a;border:0;font-weight:800;">⬇️ Instalar</button>
+</header>
+
+</section>
+<section class="section" id="en-vivo">
+  <div class="section-head">
+    <h2>Curso en vivo</h2>
+    <p>Aprende con clases en directo, práctica guiada y soporte en tiempo real.</p>
+  </div>
+
+  <div class="grid">
+    <article class="card">
+      <img class="thumb" src="img/curso_en_vivo_electricidad_industrial.jpg" alt="Curso en vivo de Electricidad Industrial"/>
+      <div class="card-body">
+        <div class="tag">🔴 En vivo • Zoom</div>
+        <h3>Electricidad Industrial (En vivo)</h3>
+
+        <div class="live-badge" aria-label="Cupos limitados">
+          <span class="live-dot" aria-hidden="true"></span>
+          CUPOS LIMITADOS
+        </div>
+
+        
+
+        <p class="desc">
+          <b>Inicio:</b> 02 de Febrero<br/>
+          <b>Sesiones:</b> 8 (Lunes y Miércoles)<br/>
+          <b>Horario:</b> 8:00 pm – 10:00 pm<br/>
+          <b>Modalidad:</b> Zoom (En vivo)
+        </p>
+
+        <ul class="temario">
+          <li><b>Módulo 1:</b> Fundamentos de sistemas trifásicos y dispositivos de mando</li>
+          <li><b>Módulo 2:</b> El contactor y protección contra sobrecargas</li>
+          <li><b>Módulo 3:</b> Arranque directo de motores trifásicos</li>
+          <li><b>Módulo 4:</b> Arranque estrella–triángulo y temporizadores</li>
+          <li><b>Módulo 5:</b> Detección de fallas, prácticas reales y otros arranques</li>
+        </ul>
+
+        <p class="desc"><b>Incluye:</b> Manual PDF + Certificado</p>
+      </div>
+
+      <div class="card-actions">
+<div class="price" data-price-kind="single" data-price-pen="60" data-price-usd="23"></div>
+<a class="btn whatsapp"
+           data-buy="1"
+           data-category="Curso en vivo"
+           data-product="Curso en Vivo de Electricidad Industrial"
+           data-plan=""
+           data-price-pen="60"
+           data-price-usd="23"
+           href="#">
+          <img class="wa-ico" src="whatsapp.png" alt="WhatsApp"/> Reservar cupo
+        </a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="manuales">
+<div class="section-head">
+<h2>Manuales</h2>
+<p>Manuales en PDF listos para estudiar y reforzar lo práctico</p>
+</div>
+<div class="grid">
+<article class="card">
+<img alt="Electricidad industrial y automatización" class="thumb" src="img/manual_industrial.jpg"/>
+<div class="card-body">
+<div class="tag">Manuales</div>
+<h3>Electricidad industrial y automatización</h3>
+
+<p class="desc">Manual PDF práctico para instalaciones industriales, mando, protecciones y automatización básica.</p>
+</div>
+<div class="card-actions">
+<div class="price" data-price-kind="single" data-price-pen="15" data-price-usd="8"></div>
+<a class="btn whatsapp" data-buy="1" data-category="Manuales" data-orig-href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electricidad%20industrial%20y%20automatizaci%C3%B3n.%0ACategor%C3%ADa%3A%20Manuales.%0APrecio%3A%20S/15%20%C2%B7%20%248.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." data-plan="" data-price-pen="15" data-price-usd="8" data-product="Electricidad industrial y automatización" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electricidad%20industrial%20y%20automatizaci%C3%B3n.%0ACategor%C3%ADa%3A%20Manuales.%0APrecio%3A%20S/15%20%C2%B7%20%248.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." rel="noopener noreferrer" target="_blank">
+<img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar
+              </a>
+</div>
+</article>
+<article class="card">
+<img alt="Electroneumática e hidráulica" class="thumb" src="img/manual_neumatica.jpg"/>
+<div class="card-body">
+<div class="tag">Manuales</div>
+<h3>Electroneumática e hidráulica</h3>
+
+<p class="desc">Manual PDF práctico: actuadores, válvulas, simbología y circuitos (paso a paso).</p>
+</div>
+<div class="card-actions">
+<div class="price" data-price-kind="single" data-price-pen="15" data-price-usd="8"></div>
+<a class="btn whatsapp" data-buy="1" data-category="Manuales" data-orig-href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electroneum%C3%A1tica%20e%20hidr%C3%A1ulica.%0ACategor%C3%ADa%3A%20Manuales.%0APrecio%3A%20S/15%20%C2%B7%20%248.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." data-plan="" data-price-pen="15" data-price-usd="8" data-product="Electroneumática e hidráulica" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electroneum%C3%A1tica%20e%20hidr%C3%A1ulica.%0ACategor%C3%ADa%3A%20Manuales.%0APrecio%3A%20S/15%20%C2%B7%20%248.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." rel="noopener noreferrer" target="_blank">
+<img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar
+              </a>
+</div>
+</article>
+<article class="card">
+<img alt="Electricidad domiciliaria" class="thumb" src="img/manual_domiciliaria.jpg"/>
+<div class="card-body">
+<div class="tag">Manuales</div>
+<h3>Electricidad domiciliaria</h3>
+
+<p class="desc">Manual PDF práctico: circuitos domiciliarios, tableros, protecciones y buenas prácticas.</p>
+</div>
+<div class="card-actions">
+<div class="price" data-price-kind="single" data-price-pen="15" data-price-usd="8"></div>
+<a class="btn whatsapp" data-buy="1" data-category="Manuales" data-orig-href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electricidad%20domiciliaria.%0ACategor%C3%ADa%3A%20Manuales.%0APrecio%3A%20S/15%20%C2%B7%20%248.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." data-plan="" data-price-pen="15" data-price-usd="8" data-product="Electricidad domiciliaria" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electricidad%20domiciliaria.%0ACategor%C3%ADa%3A%20Manuales.%0APrecio%3A%20S/15%20%C2%B7%20%248.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." rel="noopener noreferrer" target="_blank">
+<img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar
+              </a>
+</div>
+</article>
+<article class="card">
+  <img alt="Electrónica básica" class="thumb" src="img/manual_electronica_basica.jpg"/>
+  <div class="card-body">
+    <div class="tag">Manuales</div>
+    <h3>Electrónica básica</h3>
+    <p class="desc">Componentes, Principios y fundamentos, Ley de Ohm, diodos, transistores, mediciones y práctica aplicada.</p>
+  </div>
+  <div class="card-actions">
+    <div class="price" data-price-kind="single" data-price-pen="15" data-price-usd="8"></div>
+    <a class="btn whatsapp" data-buy="1" data-category="Manuales" data-plan="" data-price-pen="15" data-price-usd="8"
+       data-product="Electrónica básica" href="#" rel="noopener noreferrer" target="_blank">
+      <img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar
+    </a>
+  </div>
+</article>
+</div>
+</section>
+
+<section class="section" id="clases">
+<div class="section-head">
+<h2>Clases grabadas</h2>
+<p>Acceso a cursos anteriores grabados. (Actualización de cursos cada 6 meses).</p>
+
+</div>
+</article>
+<article class="card">
+<img alt="Electricidad industrial – Lógica cableada" class="thumb" src="img/curso_industrial_logica.jpg"/>
+<div class="card-body">
+<div class="tag">Clases grabadas</div>
+<h3>Electricidad industrial – Lógica cableada</h3>
+
+<p class="desc">Aprende a diseñar y cablear mandos eléctricos reales: control, fuerza y arranques de motores.</p>
+<ul class="temario">
+<li>Dispositivos empleados para la lógica cableada</li>
+<li>Herramientas de diseño y simulación</li>
+<li>Diseños de circuitos básicos (funciones lógicas)</li>
+<li>Diseño de circuitos de control y fuerza</li>
+<li>Control y arranque de motor trifásico y monofásico</li>
+</ul>
+</div>
+<div class="card-actions">
+<div class="price" data-price-kind="single" data-price-pen="25" data-price-usd="11"></div>
+<a class="btn whatsapp" data-buy="1" data-category="Clases grabadas" data-orig-href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electricidad%20industrial%20%E2%80%93%20L%C3%B3gica%20cableada.%0ACategor%C3%ADa%3A%20Clases%20grabadas.%0APrecio%3A%20S/25%20%C2%B7%20%2411.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." data-plan="" data-price-pen="25" data-price-usd="11" data-product="Electricidad industrial – Lógica cableada" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electricidad%20industrial%20%E2%80%93%20L%C3%B3gica%20cableada.%0ACategor%C3%ADa%3A%20Clases%20grabadas.%0APrecio%3A%20S/25%20%C2%B7%20%2411.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." rel="noopener noreferrer" target="_blank">
+<img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar
+              </a>
+</div>
+</article>
+<article class="card">
+<img alt="Electroneumática" class="thumb" src="img/curso_electroneumatica.jpg"/>
+<div class="card-body">
+<div class="tag">Clases grabadas</div>
+<h3>Electroneumática</h3>
+
+<p class="desc">Domina la electroneumática desde fundamentos hasta secuencias, usando simbología y simulación.</p>
+<ul class="temario">
+<li>Fundamentos de la neumática</li>
+<li>Producción y distribución de aire comprimido</li>
+<li>Dispositivos empleados en un sistema electroneumático</li>
+<li>Herramientas para el diseño y simulación de circuitos</li>
+<li>Secuencias de dos cilindros con el método paso a paso y cascada</li>
+</ul>
+</div>
+<div class="card-actions">
+<div class="price" data-price-kind="single" data-price-pen="25" data-price-usd="11"></div>
+<a class="btn whatsapp" data-buy="1" data-category="Clases grabadas" data-orig-href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electroneum%C3%A1tica.%0ACategor%C3%ADa%3A%20Clases%20grabadas.%0APrecio%3A%20S/25%20%C2%B7%20%2411.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." data-plan="" data-price-pen="25" data-price-usd="11" data-product="Electroneumática" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Electroneum%C3%A1tica.%0ACategor%C3%ADa%3A%20Clases%20grabadas.%0APrecio%3A%20S/25%20%C2%B7%20%2411.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." rel="noopener noreferrer" target="_blank">
+<img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar
+              </a>
+</div>
+</article>
+<article class="card">
+<img alt="PLC LOGO! 8" class="thumb" src="img/curso_logo8.jpg"/>
+<div class="card-body">
+<div class="tag">Clases grabadas</div>
+<h3>PLC LOGO! 8</h3>
+
+<p class="desc">Lógica programada con Siemens LOGO!: del primer programa a control de motores con Ladder/FBD.</p>
+<ul class="temario">
+<li>Introducción a la programación del microautomata LOGO</li>
+<li>Herramientas de simulación y ejercicios de funciones lógicas</li>
+<li>Diseño de circuitos básicos (Ladder - FBD)</li>
+<li>Convertir circuitos de lógica cableada a Ladder y FBD</li>
+<li>Control y arranque de motores eléctricos con LOGO</li>
+</ul>
+</div>
+<div class="card-actions">
+<div class="price" data-price-kind="single" data-price-pen="25" data-price-usd="11"></div>
+<a class="btn whatsapp" data-buy="1" data-category="Clases grabadas" data-orig-href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20PLC%20LOGO%21%208.%0ACategor%C3%ADa%3A%20Clases%20grabadas.%0APrecio%3A%20S/25%20%C2%B7%20%2411.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." data-plan="" data-price-pen="25" data-price-usd="11" data-product="PLC LOGO! 8" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20PLC%20LOGO%21%208.%0ACategor%C3%ADa%3A%20Clases%20grabadas.%0APrecio%3A%20S/25%20%C2%B7%20%2411.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." rel="noopener noreferrer" target="_blank">
+<img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar
+              </a>
+</div>
+</article>
+</div>
+</section>
+<section class="section" id="apps">
+<div class="section-head">
+<h2>Apps</h2>
+<p>Aplicaciones didácticas para seguir aprendiendo.</p>
+</div>
+<div class="grid">
+<article class="card">
+<img alt="Logicsoft" class="thumb" src="img/app_logicsoft.jpg"/>
+<div class="card-body">
+<div class="tag">Apps</div>
+<h3>Logicsoft</h3>
+<div class="price" data-price-kind="multi"><span class="price-part" data-label="Mensual" data-price-pen="10" data-price-usd="6"></span>  <span class="price-part" data-label="Anual" data-price-pen="30" data-price-usd="10"></span></div>
+<p class="desc">Simulador de lógica (compuertas/bloques) para aprender automatización.</p>
+</div>
+<div class="card-actions"><div class="btns-row"><a class="btn whatsapp" data-buy="1" data-category="Apps" data-orig-href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%20la%20APP%3A%20Logicsoft%20%28Mensual%29.%0APrecio%3A%20S/10%20%C2%B7%20%246.%0A%C2%BFC%C3%B3mo%20me%20activas%20el%20acceso%3F%0AGracias." data-plan="Mensual" data-price-pen="10" data-price-usd="6" data-product="Logicsoft" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%20la%20APP%3A%20Logicsoft%20%28Mensual%29.%0APrecio%3A%20S/10%20%C2%B7%20%246.%0A%C2%BFC%C3%B3mo%20me%20activas%20el%20acceso%3F%0AGracias." rel="noopener noreferrer" target="_blank">
+<img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar Mensual
+                    </a><a class="btn whatsapp" data-buy="1" data-category="Apps" data-orig-href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%20la%20APP%3A%20Logicsoft%20%28Anual%29.%0APrecio%3A%20S/30%20%C2%B7%20%2410.%0A%C2%BFC%C3%B3mo%20me%20activas%20el%20acceso%3F%0AGracias." data-plan="Anual" data-price-pen="30" data-price-usd="10" data-product="Logicsoft" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%20la%20APP%3A%20Logicsoft%20%28Anual%29.%0APrecio%3A%20S/30%20%C2%B7%20%2410.%0A%C2%BFC%C3%B3mo%20me%20activas%20el%20acceso%3F%0AGracias." rel="noopener noreferrer" target="_blank">
+<img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar Anual
+                    </a></div></div>
+</article>
+<article class="card">
+<img alt="Calculadora Pasir" class="thumb" src="img/app_calculadora.jpg"/>
+<div class="card-body">
+<div class="tag">Apps</div>
+<h3>Calculadora Pasir</h3>
+
+<p class="desc">Calculadora eléctrica industrial para dimensionamiento y apoyo didáctico.</p>
+</div>
+<div class="card-actions">
+<div class="price" data-price-kind="single" data-price-pen="10" data-price-usd="5"></div>
+<a class="btn whatsapp" data-buy="1" data-category="Apps" data-orig-href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Calculadora%20Pasir.%0ACategor%C3%ADa%3A%20Apps.%0APrecio%3A%20S/10%20%C2%B7%20%246.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." data-plan="" data-price-pen="10" data-price-usd="5" data-product="Calculadora Pasir" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%0AQuiero%20adquirir%3A%20Calculadora%20Pasir.%0ACategor%C3%ADa%3A%20Apps.%0APrecio%3A%20S/10%20%C2%B7%20%246.%0A%C2%BFC%C3%B3mo%20lo%20recibo%20/%20activo%3F%0AGracias." rel="noopener noreferrer" target="_blank">
+<img alt="WhatsApp" class="wa-ico" src="whatsapp.png"/> Comprar
+              </a>
+</div>
+</article>
+</div>
+</section>
+<section class="how" id="como-comprar">
+<h2>Cómo comprar</h2>
+<ol>
+<li>Toca <b>Comprar</b> en el producto.</li>
+<li>WhatsApp se abre con un mensaje automático.</li>
+<li>Te respondo con <b>pago</b> y <b>entrega/activación</b>.</li>
+</ol>
+<small>Sigueme en mis redes <b>Pasir Industrial</b>, </small>
+</section>
+</main>
+<footer>
+    © <span id="y"></span> Pasir Industrial – Elwin Pachas.
+  </footer>
+<a class="float-wa" href="https://wa.me/51926299585?text=Hola%2C%20buen%20d%C3%ADa.%20Quiero%20comprar%20un%20producto%20de%20Pasir%20Industrial." rel="noopener noreferrer" target="_blank">💬 WhatsApp</a>
+<script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    const themeMeta = document.getElementById('theme-color-meta');
+
+    function setTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      const dark = theme === 'dark';
+      themeIcon.textContent = dark ? '🌙' : '☀️';
+      themeLabel.textContent = dark ? 'Modo oscuro' : 'Modo claro';
+      themeMeta.setAttribute('content', dark ? '#0b1220' : '#f3f4f6');
+      localStorage.setItem('pasir-theme', theme);
+    }
+
+    const saved = localStorage.getItem('pasir-theme');
+    setTheme(saved === 'dark' ? 'dark' : 'light');
+setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+  
+
+    
+
+    // --- Popover Moneda (icono 💱) ---
+    const currencyBtn = document.getElementById('currency-btn');
+    const currencyPop = document.getElementById('currency-pop');
+
+    function closeCurrencyPop() {
+      currencyPop && currencyPop.classList.remove('show');
+    }
+
+    currencyBtn && currencyBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currencyPop.classList.toggle('show');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!currencyPop) return;
+      if (!currencyPop.contains(e.target) && e.target !== currencyBtn) closeCurrencyPop();
+    });
+
+// --- Moneda / conversión ---
+    const currencySelect = document.getElementById('currency-select');
+
+    const regionToCurrency = {
+      // América
+      "PE":"PEN","US":"USD","CA":"CAD","MX":"MXN","GT":"GTQ","HN":"HNL","NI":"NIO","CR":"CRC","PA":"PAB","DO":"DOP",
+      "CO":"COP","CL":"CLP","AR":"ARS","BR":"BRL","UY":"UYU","PY":"PYG","BO":"BOB",
+      // Europa
+      "ES":"EUR","FR":"EUR","DE":"EUR","IT":"EUR","PT":"EUR","NL":"EUR","BE":"EUR","AT":"EUR","IE":"EUR","FI":"EUR","GR":"EUR",
+      "GB":"GBP","CH":"CHF","SE":"SEK","NO":"NOK","DK":"DKK","PL":"PLN","CZ":"CZK","HU":"HUF","RO":"RON","BG":"BGN","RS":"RSD","UA":"UAH","RU":"RUB","IS":"ISK","TR":"TRY",
+      // Asia / Oceanía
+      "JP":"JPY","CN":"CNY","HK":"HKD","KR":"KRW","IN":"INR","PK":"PKR","BD":"BDT","LK":"LKR","SG":"SGD","MY":"MYR","TW":"TWD","ID":"IDR","PH":"PHP","TH":"THB","VN":"VND",
+      "AU":"AUD","NZ":"NZD",
+      // Medio Oriente / África
+      "AE":"AED","SA":"SAR","QA":"QAR","KW":"KWD","BH":"BHD","OM":"OMR","IL":"ILS",
+      "EG":"EGP","MA":"MAD","ZA":"ZAR","NG":"NGN","KE":"KES","GH":"GHS"
+    };
+
+    // --- Lista automática de monedas (desde la API de tasas) ---
+    // Prioridad de orden: 1) América del Sur, 2) Europa, 3) resto (A-Z)
+    const prioritySouthAmerica = [
+      "PEN","ARS","BOB","BRL","CLP","COP","PYG","UYU","VES","GYD","SRD"
+    ];
+    const priorityEurope = [
+      "EUR","GBP","CHF","SEK","NOK","DKK","PLN","CZK","HUF","RON","BGN","RSD","UAH","ISK","TRY"
+    ];
+
+    // Nombres amigables para las más usadas (si no existe, se muestra el código)
+    const currencyNames = {
+      "PEN":"Sol (PEN)","USD":"Dólar (USD)","EUR":"Euro (EUR)","GBP":"Libra (GBP)","CHF":"Franco (CHF)",
+      "ARS":"Peso argentino (ARS)","BOB":"Boliviano (BOB)","BRL":"Real (BRL)","CLP":"Peso chileno (CLP)",
+      "COP":"Peso colombiano (COP)","PYG":"Guaraní (PYG)","UYU":"Peso uruguayo (UYU)","VES":"Bolívar (VES)",
+      "MXN":"Peso mexicano (MXN)","CAD":"Dólar canadiense (CAD)","AUD":"Dólar australiano (AUD)","NZD":"Dólar neozelandés (NZD)",
+      "JPY":"Yen (JPY)","CNY":"Yuan (CNY)","HKD":"Dólar Hong Kong (HKD)","KRW":"Won (KRW)","INR":"Rupia (INR)",
+      "SGD":"Dólar Singapur (SGD)","MYR":"Ringgit (MYR)","IDR":"Rupia indonesia (IDR)","PHP":"Peso filipino (PHP)",
+      "THB":"Baht (THB)","VND":"Dong (VND)","ZAR":"Rand (ZAR)","AED":"Dirham (AED)","SAR":"Riyal (SAR)"
+    };
+
+    function labelForCurrency(code) {
+      return currencyNames[code] || code;
+    }
+
+    function buildOptions(codes) {
+      const uniq = Array.from(new Set(codes.filter(Boolean)));
+      // Asegurar USD porque es la base
+      if (!uniq.includes("USD")) uniq.push("USD");
+
+      const saSet = new Set(prioritySouthAmerica);
+      const euSet = new Set(priorityEurope);
+
+      const sa = prioritySouthAmerica.filter(c => uniq.includes(c));
+      const eu = priorityEurope.filter(c => uniq.includes(c));
+      const other = uniq
+        .filter(c => !saSet.has(c) && !euSet.has(c) && c !== "USD") // USD se incluye igual pero puede ir en "Otras"
+        .sort((a,b) => a.localeCompare(b));
+
+      // Si USD no está ya en SA/EU, lo ponemos al inicio de "Otras"
+      const otherFinal = ["USD", ...other.filter(c => c !== "USD")];
+
+      const makeOpt = (c) => `<option value="${c}">${labelForCurrency(c)}</option>`;
+
+      const parts = [];
+      parts.push(`<option value="AUTO">Auto (mi país)</option>`);
+      parts.push(`<optgroup label="América del Sur">${sa.map(makeOpt).join("")}</optgroup>`);
+      parts.push(`<optgroup label="Europa">${eu.map(makeOpt).join("")}</optgroup>`);
+      parts.push(`<optgroup label="Otras monedas">${otherFinal.map(makeOpt).join("")}</optgroup>`);
+      return parts.join("\n    ");
+    }
+
+    async function initCurrencyOptions() {
+      // Mientras carga, deja el selector usable con AUTO/USD
+      currencySelect.innerHTML = `<option value="AUTO">Auto (mi país)</option>\n    <option value="USD">Dólar (USD)</option>`;
+      currencySelect.disabled = true;
+
+      try {
+        const { rates } = await getRatesUSD();
+        const codes = Object.keys(rates || {});
+        currencySelect.innerHTML = buildOptions(codes);
+      } catch (e) {
+        // Si falla, dejamos al menos AUTO/USD + algunas comunes
+        const fallback = [
+          "USD","EUR","PEN","MXN","COP","CLP","ARS","BRL","UYU","PYG","BOB","GBP","CHF","JPY"
+        ];
+        currencySelect.innerHTML = buildOptions(fallback);
+      } finally {
+        currencySelect.disabled = false;
+      }
+    }
+
+    function detectCurrencyFromLanguage() {
+  const lang = (navigator.language || 'es-PE');
+  const region = (lang.split('-')[1] || '').toUpperCase();
+  return regionToCurrency[region] || "USD";
+}
+
+// Auto currency resolved by IP (best effort). Falls back to language if it fails.
+let autoCurrency = null;
+let autoCountry = null;
+
+async function fetchJsonWithTimeout(url, timeoutMs = 2500) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const resp = await fetch(url, { cache: "no-store", signal: ctrl.signal });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    return await resp.json();
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+async function detectCurrencyByIP() {
+  // 1) ipwho.is (simple, no key). Example fields: country_code, currency_code
+  try {
+    const d1 = await fetchJsonWithTimeout("https://ipwho.is/?fields=success,country_code,currency_code");
+    if (d1 && d1.success && d1.currency_code) {
+      return { country: (d1.country_code || "").toUpperCase(), currency: d1.currency_code.toUpperCase() };
+    }
+  } catch (e) {}
+
+  // 2) ipapi.co (fallback, no key). Fields: country, currency
+  try {
+    const d2 = await fetchJsonWithTimeout("https://ipapi.co/json/");
+    if (d2 && (d2.currency || d2.country)) {
+      return { country: (d2.country || "").toUpperCase(), currency: (d2.currency || "").toUpperCase() };
+    }
+  } catch (e) {}
+
+  return null;
+}
+
+async function resolveAutoCurrency() {
+  if (autoCurrency) return autoCurrency;
+
+  // quick default
+  autoCurrency = detectCurrencyFromLanguage();
+
+  const r = await detectCurrencyByIP();
+  if (r && r.currency) {
+    autoCountry = r.country || autoCountry;
+    // Rule: Peru always PEN (use your local PEN prices)
+    if (r.country === "PE") {
+      autoCurrency = "PEN";
+    } else {
+      autoCurrency = r.currency;
+    }
+  }
+  return autoCurrency;
+}
+
+function detectCurrency() {
+  return autoCurrency || detectCurrencyFromLanguage();
+}
+
+    function formatMoney(amount, currency) {
+      const locale = (currency === "PEN") ? "es-PE" : (navigator.language || "en-US");
+      // Algunas monedas trabajan sin decimales en la práctica (o casi siempre se muestran sin centavos)
+      const zeroDecimals = new Set(["PEN","CLP","COP","ARS","JPY","KRW","VND","IDR","PYG"]);
+      const decimals = zeroDecimals.has(currency) ? 0 : 2;
+      try {
+        return new Intl.NumberFormat(locale, {
+          style: "currency",
+          currency,
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        }).format(amount);
+      } catch {
+        // Fallback si el runtime no soporta el código de moneda
+        const n = new Intl.NumberFormat(locale, {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        }).format(amount);
+        return `${n} ${currency}`;
+      }
+    }
+
+    async function getRatesFromOpenErApi() {
+      // 160+ monedas, sin API key
+      // Docs: https://open.er-api.com/ (ExchangeRate-API open access)
+      const resp = await fetch('https://open.er-api.com/v6/latest/USD', { cache: 'no-store' });
+      if (!resp.ok) throw new Error('open.er-api.com failed');
+      const data = await resp.json();
+      if (data?.result !== 'success' || !data?.rates) throw new Error('open.er-api.com bad payload');
+      return { rates: data.rates, date: data.time_last_update_utc || null, provider: 'open.er-api.com' };
+    }
+
+    async function getRatesFromExchangeRateHost() {
+      // Fallback
+      const resp = await fetch('https://api.exchangerate.host/latest?base=USD', { cache: 'no-store' });
+      if (!resp.ok) throw new Error('exchangerate.host failed');
+      const data = await resp.json();
+      if (!data?.rates) throw new Error('exchangerate.host bad payload');
+      return { rates: data.rates, date: data.date || null, provider: 'exchangerate.host' };
+    }
+
+    async function getRatesUSD() {
+      // cache de TODAS las tasas en sessionStorage
+      const key = 'fx_USD_ALL';
+      const cached = sessionStorage.getItem(key);
+      if (cached) {
+        try {
+          const obj = JSON.parse(cached);
+          if (obj?.rates && typeof obj.rates === 'object') return obj;
+        } catch {}
+      }
+
+      let payload;
+      try {
+        payload = await getRatesFromOpenErApi();
+      } catch (e1) {
+        payload = await getRatesFromExchangeRateHost();
+      }
+
+      sessionStorage.setItem(key, JSON.stringify(payload));
+      return payload;
+    }
+
+    async function getRateUSDTo(currency) {
+      if (currency === 'USD') return 1;
+      const data = await getRatesUSD();
+      const rate = data?.rates?.[currency];
+      if (typeof rate !== 'number') throw new Error('FX rate missing');
+      return rate;
+    }
+
+    function buildWhatsAppLink({ product, category, plan, priceText }) {
+      const cat = (category || "").toLowerCase();
+
+      // Mensaje especial para cursos en vivo
+      if (cat.includes("curso en vivo")) {
+        const lines = [
+          "Hola 👋, estoy interesado en el *Curso en Vivo de Electricidad Industrial*.",
+          "",
+          "📅 Inicio: 02 de Febrero",
+          "🗓️ 8 sesiones – Lunes y Miércoles",
+          "⏰ Horario: 8:00 pm – 10:00 pm",
+          `💰 Precio: ${priceText}`,
+          "",
+          "Quisiera reservar mi cupo, por favor."
+        ];
+        const text = encodeURIComponent(lines.join("\n"));
+        return `https://wa.me/51926299585?text=${text}`;
+      }
+
+      // Prefijo simple según tipo (sin mencionar "Categoría")
+      let prefix = "Quiero adquirir";
+      if (cat.includes("manual")) prefix = "Quiero adquirir los manuales de";
+      else if (cat.includes("clases") || cat.includes("grabadas") || cat.includes("curso")) prefix = "Quiero adquirir el curso de";
+      else if (cat.includes("app")) prefix = "Quiero adquirir la app";
+
+      const item = `${product}${plan ? " (" + plan + ")" : ""}`;
+
+      // Mensaje directo
+      const msg = `Hola, buen día. ${prefix} ${item}. ${priceText}. ¿Cómo puedo realizar el pago?`;
+      return `https://wa.me/51926299585?text=${encodeURIComponent(msg)}`;
+    }
+
+    async function applyCurrency(currency) {
+      const isPeru = currency === "PEN";
+
+      // 1) actualizar precios visibles
+      let rate = 1;
+      if (!isPeru) {
+        try {
+          rate = await getRateUSDTo(currency);
+        } catch (e) {
+          // si falla la conversión, caer a USD
+          currency = "USD";
+          rate = 1;
+          currencySelect.value = "USD";
+        }
+      }
+
+      // precios simples (etiquetas)
+      document.querySelectorAll('.price[data-price-kind="single"]').forEach(el => {
+        const pen = Number(el.dataset.pricePen);
+        const usd = Number(el.dataset.priceUsd);
+        const amount = isPeru ? pen : (usd * rate);
+        el.textContent = formatMoney(amount, isPeru ? "PEN" : currency);
+      });
+
+      // precios multi (Logicsoft)
+      document.querySelectorAll('.price[data-price-kind="multi"] .price-part').forEach(part => {
+        const label = part.dataset.label || "";
+        const pen = Number(part.dataset.pricePen);
+        const usd = Number(part.dataset.priceUsd);
+        const amount = isPeru ? pen : (usd * rate);
+        const money = formatMoney(amount, isPeru ? "PEN" : currency);
+        part.textContent = `${label} ${money}`;
+      });
+
+      // 2) actualizar links + precio dentro del botón (cada botón usa su propio data-price-pen/usd)
+      document.querySelectorAll('a[data-buy="1"]').forEach(a => {
+        const product = a.dataset.product || "Producto";
+        const category = a.dataset.category || "Pasir Industrial";
+        const plan = (a.dataset.plan || "").trim();
+
+        const pen = Number(a.dataset.pricePen);
+        const usd = Number(a.dataset.priceUsd);
+
+        const amount = isPeru ? pen : (usd * rate);
+        let priceText = formatMoney(amount, isPeru ? "PEN" : currency);
+        if (!isPeru) priceText = `${priceText} ${currency}`;
+
+        // link WhatsApp con mensaje nuevo
+        a.href = buildWhatsAppLink({ product, category, plan, priceText });
+
+        // precio dentro del botón
+        let span = a.querySelector(".btn-price");
+        if (!span) {
+          span = document.createElement("span");
+          span.className = "btn-price";
+          a.appendChild(span);
+        }
+        span.textContent = priceText ? ` ${priceText}` : "";
+      });
+    }
+
+    function getSelectedCurrency() {
+      const v = currencySelect.value;
+      if (v === "AUTO") return detectCurrency();
+      return v;
+    }
+
+    // init
+    (async function initCurrency() {
+
+      await initCurrencyOptions();
+
+      // default: auto
+      const savedCur = localStorage.getItem("pasir-currency") || "AUTO";
+
+      // Si la moneda guardada ya no existe en la lista, vuelve a AUTO
+      const exists = Array.from(currencySelect.options).some(o => o.value === savedCur);
+      currencySelect.value = exists ? savedCur : "AUTO";
+
+      if (currencySelect.value === "AUTO") {
+        await resolveAutoCurrency();
+      }
+
+      applyCurrency(getSelectedCurrency());
+
+      currencySelect.addEventListener("change", async () => {
+
+        closeCurrencyPop();
+localStorage.setItem("pasir-currency", currencySelect.value);
+        if (currencySelect.value === "AUTO") {
+          await resolveAutoCurrency();
+        }
+        applyCurrency(getSelectedCurrency());
+      });
+})();
+
+    // ===== Contador regresivo: Curso en vivo (Lima -05:00) =====
+    (function(){
+      // Inicio del curso: 02 Febrero 2026, 8:00 pm (hora Perú)
+      const targetISO = "2026-02-02T20:00:00-05:00";
+      const target = new Date(targetISO).getTime();
+
+      const elD = document.getElementById("cd-d");
+      const elH = document.getElementById("cd-h");
+      const elM = document.getElementById("cd-m");
+      const elS = document.getElementById("cd-s");
+      const wrap = document.getElementById("countdown-live");
+
+      if(!elD || !elH || !elM || !elS || !wrap) return;
+
+      const pad2 = (n) => String(n).padStart(2, "0");
+
+      function tick(){
+        const now = Date.now();
+        let diff = target - now;
+
+        if(diff <= 0){
+          // Ya empezó
+          elD.textContent = "00";
+          elH.textContent = "00";
+          elM.textContent = "00";
+          elS.textContent = "00";
+          wrap.innerHTML = '<span class="cd-box"><span class="cd-num">¡HOY!</span> <span class="cd-unit">Inicia el curso</span></span>';
+          clearInterval(timer);
+          return;
+        }
+
+        const sec = Math.floor(diff/1000);
+        const d = Math.floor(sec / 86400);
+        const h = Math.floor((sec % 86400) / 3600);
+        const m = Math.floor((sec % 3600) / 60);
+        const s = sec % 60;
+
+        elD.textContent = pad2(d);
+        elH.textContent = pad2(h);
+        elM.textContent = pad2(m);
+        elS.textContent = pad2(s);
+      }
+
+      tick();
+      const timer = setInterval(tick, 1000);
+    })();
+
+</script>
+
+  <script>
+  // PWA: registrar Service Worker
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    });
+  }
+</script>
+
+  <script>
+  // PWA: botón Instalar (Android/Chrome)
+  let deferredPrompt = null;
+  const installBtn = document.getElementById("installBtn");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.style.display = "inline-flex";
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    if (installBtn) installBtn.style.display = "none";
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      installBtn.style.display = "none";
+      deferredPrompt.prompt();
+      try { await deferredPrompt.userChoice; } catch (err) {}
+      deferredPrompt = null;
+    });
+  }
+
+  // iPhone/iPad: no hay popup automático. Mostramos tip simple.
+  (function(){
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const isStandalone = window.matchMedia && window.matchMedia("(display-mode: standalone)").matches;
+    if (isIOS && !isStandalone && installBtn) {
+      installBtn.style.display = "inline-flex";
+      installBtn.textContent = "Instalar (iPhone)";
+      installBtn.addEventListener("click", () => {
+        alert("En iPhone: toca Compartir (⬆️) y luego 'Añadir a pantalla de inicio'.");
+      });
+    }
+  })();
+</script>
+
+<script>
+(function toggleAuthChips(){
+  const token = sessionStorage.getItem("pasir_token");
+  const loginChip = document.getElementById("loginChip");
+  const accountChip = document.getElementById("accountChip");
+  if (token){
+    if (loginChip) loginChip.style.display = "none";
+    if (accountChip) accountChip.style.display = "inline-flex";
+  } else {
+    if (loginChip) loginChip.style.display = "inline-flex";
+    if (accountChip) accountChip.style.display = "none";
+  }
+})();
+</script>
+
+</div></main>
+</body>
+</html>
