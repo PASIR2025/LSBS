@@ -20,51 +20,21 @@
     a{color:inherit}
 
     /* Header */
-    header.course-topbar{
+    header{
       position:sticky;top:0;z-index:20;
-      padding:6px 12px;                 /* ↓ MÁS BAJO (1/3 aprox) */
+      padding:6px 12px;
       border-bottom:1px solid var(--stroke);
       background:linear-gradient(180deg, rgba(11,18,32,.96), rgba(11,18,32,.86));
       backdrop-filter: blur(8px);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
+      display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:nowrap;
     }
-    header.course-topbar .titlewrap{
-      flex:1;
-      min-width:0;
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      text-align:left;
-    }
-    #courseTitle{
-      font-weight:1000;
-      font-size:16px;                   /* ↓ más compacto */
-      line-height:1.15;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    #nowPlaying{
-      font-size:12px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .backbtn{white-space:nowrap}
-    @media (max-width:520px){
-      header.course-topbar{padding:5px 10px; gap:8px}
-      #courseTitle{font-size:15px}
-    }
-#courseTitle{font-weight:1000}
+    #courseTitle{font-weight:1000}
     .muted{color:var(--muted)}
 
     .top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .topbtn{
       display:inline-flex;align-items:center;gap:8px;
-      padding:10px 12px;border-radius:12px;text-decoration:none;font-weight:900;
+      padding:9px 10px;border-radius:12px;text-decoration:none;font-weight:900;
       border:1px solid transparent;
     }
     .secondary{background:rgba(56,189,248,.18);border-color:rgba(56,189,248,.35)}
@@ -333,20 +303,30 @@ header > div:first-child { display:none !important; }
 
 </head>
 <body>
-  
-<header class="course-topbar">
-  <a class="topbtn secondary backbtn" href="account.html" aria-label="Volver a Mis cursos">← Mis cursos</a>
+  <header>
+    <div>
+      <div id="courseTitle">Cargando…</div>
+      <div id="nowPlaying" class="muted"></div>
+    </div>
+    <div class="top-actions">
+      <a class="topbtn secondary" href="account.html">⬅ Mis cursos</a>
 
-  <div class="titlewrap">
-    <div id="courseTitle">Cargando…</div>
-    <div id="nowPlaying" class="muted"></div>
-  </div>
+      <div class="user-menu" id="userMenu" style="display:none;">
+        <button class="user-trigger" id="userTrigger" aria-haspopup="menu" aria-expanded="false">
+          <span class="avatar" aria-hidden="true">👤</span>
+          <span id="userName">Cargando…</span>
+          <span class="caret" aria-hidden="true">▾</span>
+        </button>
 
-  <button class="theme-btn" id="theme-toggle" type="button" aria-label="Cambiar tema">
-    <span id="theme-icon">☀️</span>
-    <span id="theme-label" class="sr-only">Modo claro</span>
-  </button>
-</header>
+        <div class="user-dropdown" id="userDropdown" role="menu">
+          <a class="dd-item" href="account.html" role="menuitem">📚 Mis cursos</a>
+          <a class="dd-item" href="account.html" role="menuitem">👤 Mi perfil</a>
+          <div class="dd-sep"></div>
+          <button class="dd-item danger" id="logout" role="menuitem">🚪 Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  </header>
 
   <div class="container">
     <section class="player-wrap" aria-label="Reproductor">
