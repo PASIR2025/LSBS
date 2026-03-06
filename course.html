@@ -375,31 +375,31 @@ body[data-theme="light"] .cc-time{
 </style>
 
 
-<style id="true-left-shift-fix">
-/* === Ajuste real: mover el bloque del curso un poco hacia la izquierda en móvil === */
-@media (max-width: 700px){
+<style id="center-balanced-fix">
+/* === Centrar correctamente reproductor y módulos en móvil === */
+@media (max-width:700px){
+
   main.page > .container{
-    max-width: none !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 6px 18px 22px 6px !important; /* menos padding a la izquierda, más a la derecha */
+    width:100% !important;
+    max-width:680px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding:6px 12px 22px 12px !important;
   }
 
-  /* El contenedor interno del player + módulos */
   main.page > .container > .container{
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    width:100% !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding:0 !important;
   }
 
   .player-wrap,
   .curriculum{
-    width: 100% !important;
-    max-width: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
   }
+
 }
 </style>
 
