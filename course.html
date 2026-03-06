@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Curso</title>
+<meta name="theme-color" id="theme-color-meta" content="#f2f7ff">
   <style>
     :root{
       --bg:#0b1220;
@@ -22,19 +23,19 @@
     /* Header */
     header{
       position:sticky;top:0;z-index:20;
-      padding:6px 12px;
+      padding:14px 16px;
       border-bottom:1px solid var(--stroke);
-      background:linear-gradient(180deg, rgba(11,18,32,.96), rgba(11,18,32,.86));
+      background:var(--panel2);
       backdrop-filter: blur(8px);
-      display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:nowrap;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
     }
-    #courseTitle{font-weight:1000}
+    #courseTitle{font-weight:1000;font-size:20px;}
     .muted{color:var(--muted)}
 
     .top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .topbtn{
       display:inline-flex;align-items:center;gap:8px;
-      padding:9px 10px;border-radius:12px;text-decoration:none;font-weight:900;
+      padding:10px 12px;border-radius:12px;text-decoration:none;font-weight:900;
       border:1px solid transparent;
     }
     .secondary{background:rgba(56,189,248,.18);border-color:rgba(56,189,248,.35)}
@@ -160,6 +161,7 @@
       .curriculum{max-height: calc(100vh - 94px); overflow:auto}
     }
 
+
     /* User dropdown */
     .user-menu{position:relative}
     .user-trigger{
@@ -199,12 +201,7 @@
 
   </style>
 
-<style>
-/* ==== Ajustes solicitados: ocultar título y perfil (menú usuario) ==== */
-#courseTitle, #nowPlaying, #userMenu { display:none !important; }
-/* Mantén el header pero solo con "Mis cursos" */
-header > div:first-child { display:none !important; }
-</style>
+
 
 <style>#openYT{display:none !important;}</style>
 
@@ -238,6 +235,7 @@ header > div:first-child { display:none !important; }
   height:100vh !important;
 }
 </style>
+
 
 <style>
 /* ==== Bloquear interacción directa con el player (taps) y mostrar controles propios al tocar ==== */
@@ -288,6 +286,7 @@ header > div:first-child { display:none !important; }
 #ccWrap{ }
 </style>
 
+
 <style>
 /* Separar título del área de controles */
 .player-meta .left{ margin-top: 22px !important; }
@@ -296,14 +295,136 @@ header > div:first-child { display:none !important; }
 .cc-speed{ width:56px !important; font-size:14px !important; }
 </style>
 
+
 <style>
 /* Subir controles un poco más arriba para no tapar título */
 #ccWrap{ bottom:28px !important; }
 </style>
 
+
+<style>
+/* Ocultar perfil/correo dentro del curso */
+#userMenu, #userDropdown, .user-menu, .user-dropdown, .user-chip, .profile-chip { display:none !important; }
+</style>
+
+<link rel="stylesheet" href="app.css">
+<script src="theme.js" defer></script>
+
+<style>
+/* Header Pasir Academy más delgado */
+.app-header{
+  padding:4px 12px !important;
+  height:50px !important;
+  min-height:50px !important;
+}
+
+.app-header .container{
+  padding:0 !important;
+}
+
+.app-header .row{
+  height:50px !important;
+  min-height:50px !important;
+  display:flex;
+  align-items:center;
+}
+</style>
+
+
+<style id="course-final-fixes">
+/* ===== Ajustes pedidos: reproductor más grande/cerca + botones visibles en modo claro ===== */
+
+/* subir un poco todo y dar más espacio real al reproductor */
+main.page > .container{
+  padding-top: 8px !important;
+}
+main.page > .container > .container{
+  padding: 0 !important;
+  margin-top: 4px !important;
+}
+.player-wrap{
+  max-width: 760px !important;
+  margin: 0 auto !important;
+}
+.player{
+  padding-top: 62% !important;
+}
+
+/* en móvil vertical: hacerlo un poco más grande */
+@media (max-width: 600px){
+  main.page > .container{
+    padding: 6px 10px 22px !important;
+  }
+  .player{
+    padding-top: 64% !important;
+  }
+}
+
+/* botones velocidad y expandir visibles en modo claro */
+body[data-theme="light"] #ccSpeedBtn,
+body[data-theme="light"] #ccFs,
+body[data-theme="light"] .cc-btn{
+  background: #eaf2ff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(37,99,235,.25) !important;
+}
+body[data-theme="light"] .cc-time{
+  color: #0f172a !important;
+  opacity: .92 !important;
+}
+</style>
+
+
+<style id="true-left-shift-fix">
+/* === Ajuste real: mover el bloque del curso un poco hacia la izquierda en móvil === */
+@media (max-width: 700px){
+  main.page > .container{
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 6px 18px 22px 6px !important; /* menos padding a la izquierda, más a la derecha */
+  }
+
+  /* El contenedor interno del player + módulos */
+  main.page > .container > .container{
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .player-wrap,
+  .curriculum{
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+</style>
+
 </head>
-<body>
-  <header>
+<body data-theme="light">
+  
+<header class="app-header">
+  <div class="container">
+    <div class="row">
+      <div class="brand" role="banner">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Pasir Academy</span>
+      </div>
+      <div class="nav-actions">
+        <button class="btn theme-btn" id="theme-toggle" type="button" aria-label="Cambiar tema">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label" class="sr-only">Modo claro</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page"><div class="container">
+<header>
     <div>
       <div id="courseTitle">Cargando…</div>
       <div id="nowPlaying" class="muted"></div>
@@ -351,6 +472,7 @@ header > div:first-child { display:none !important; }
   <button class="cc-btn" id="ccFs" type="button" aria-label="Pantalla completa">⛶</button>
 </div>
 
+
           <!-- Link externo oculto para mantener el reproductor limpio -->
           <a class="smallbtn" id="openYT" href="#" target="_blank" rel="noopener" style="display:none">Ver en YouTube</a>
         </div>
@@ -376,6 +498,7 @@ header > div:first-child { display:none !important; }
 let YTPlayer = null;
 let YTReady = false;
 let pendingVideoId = null;
+let videoLoadedFlag = false;
 
 function fmtTime_(sec){
   sec = Math.max(0, Math.floor(sec || 0));
@@ -419,6 +542,7 @@ function setupControls_(){
   const fs = document.getElementById("ccFs");
   const wrap = document.querySelector(".player-wrap");
   let seeking = false;
+
 
   const speedBtn = document.getElementById("ccSpeedBtn");
   const speedRates = [0.5, 0.75, 1, 1.25, 1.5, 2];
@@ -644,7 +768,8 @@ function escapeHtml_(s){
       `;
       b.onclick = () => {
         setActive(b);
-        loadVideoById_(videoId, true);
+        videoLoadedFlag = true;
+        loadVideoById_(videoId, false);
         document.getElementById("nowPlaying").textContent = "Reproduciendo: " + m.title;
         const nt = document.getElementById("nowTitle"); if (nt) nt.textContent = m.title;
         const yt = document.getElementById("openYT");
@@ -654,7 +779,7 @@ function escapeHtml_(s){
         }
       };
       box.appendChild(b);
-      if (idx === 0) b.click();
+      // autoplay eliminado: el alumno debe presionar play manualmente
     });
   })().catch(err => {
     showError(err.message || String(err));
@@ -733,6 +858,7 @@ function escapeHtml_(s){
 })();
 </script>
 
+
 <script>
 /* ==== Mostrar controles propios al tocar el video (y bloquear toques al player nativo) ==== */
 (function(){
@@ -741,7 +867,7 @@ function escapeHtml_(s){
   let hideTimer = null;
 
   function showControls(){
-    if (!wrap) return;
+    if (!wrap || !videoLoadedFlag) return;
     wrap.classList.add("is-visible");
     if (hideTimer) clearTimeout(hideTimer);
     hideTimer = setTimeout(() => {
@@ -779,8 +905,11 @@ function escapeHtml_(s){
 })();
 </script>
 
+
+</div></main>
 </body>
 </html>
+
 
 <script>
 (function(){
