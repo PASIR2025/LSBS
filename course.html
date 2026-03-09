@@ -958,12 +958,6 @@ function escapeHtml_(s){
   function saveCourseProgress(data){
     localStorage.setItem(courseProgressKey(), JSON.stringify(data || {}));
   }
-  function ensureTotalModulesSaved(total){
-    const p = loadCourseProgress();
-    p.totalModules = Number(total || 0);
-    saveCourseProgress(p);
-  }
-
 
   function markModuleCompleted(idx){
     const p = loadCourseProgress();
@@ -1076,7 +1070,6 @@ function escapeHtml_(s){
     showError("");
 
         courseModules = Array.isArray(r.modules) ? r.modules : [];
-    ensureTotalModulesSaved(courseModules.length);
     document.getElementById("countMods").textContent = (courseModules.length||0) + " clases";
     courseModules.forEach((m, idx) => {
       const b = document.createElement("button");
