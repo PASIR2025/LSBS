@@ -1,0 +1,3230 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Curso</title>
+<meta name="theme-color" id="theme-color-meta" content="#f2f7ff">
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(255,255,255,.04);
+      --stroke:rgba(148,163,184,.22);
+      --text:#f9fafb;
+      --muted:rgba(255,255,255,.70);
+      --green:#22c55e;
+      --blue:#38bdf8;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui;background:var(--bg);color:var(--text)}
+    a{color:inherit}
+
+    /* Header */
+    header{
+      position:sticky;top:0;z-index:20;
+      padding:14px 16px;
+      border-bottom:1px solid var(--stroke);
+      background:var(--panel2);
+      backdrop-filter: blur(8px);
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    }
+    #courseTitle{font-weight:1000;font-size:20px;}
+    .muted{color:var(--muted)}
+
+    .top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .topbtn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 12px;border-radius:12px;text-decoration:none;font-weight:900;
+      border:1px solid transparent;
+    }
+    .secondary{background:rgba(56,189,248,.18);border-color:rgba(56,189,248,.35)}
+    .primary{background:var(--green);color:#071018;border:0;cursor:pointer}
+
+    /* Layout like Udemy mobile: player arriba + módulos abajo */
+    .container{max-width:1080px;margin:0 auto;padding:14px 14px 28px}
+    .player-wrap{
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      overflow:hidden;
+      background:var(--panel2);
+      box-shadow:0 18px 40px rgba(0,0,0,.35);
+    }
+    .player{
+      position:relative;
+      width:100%;
+      padding-top:56.25%;
+      background:rgba(0,0,0,.25);
+    }
+    iframe{position:absolute;inset:0;width:100%;height:100%}
+
+    .player-meta{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
+      padding:12px 12px 12px;
+      border-top:1px solid var(--stroke);
+    }
+    .player-meta .left{min-width:0}
+    .player-meta .left .now{font-weight:900}
+    .player-meta .left .hint{font-size:12px;color:var(--muted);margin-top:4px}
+    .player-meta .right{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .smallbtn{
+      padding:10px 12px;border-radius:12px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.06);
+      text-decoration:none;font-weight:900;
+    }
+    .smallbtn:hover{border-color:rgba(255,255,255,.28)}
+
+    /* Curriculum */
+    .curriculum{
+      margin-top:14px;
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      overflow:hidden;
+      background:var(--panel2);
+    }
+    .curriculum-h{
+      padding:14px 14px;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      border-bottom:1px solid var(--stroke);
+      background:rgba(255,255,255,.03);
+    }
+    .curriculum-h h2{margin:0;font-size:16px;letter-spacing:.2px}
+    .curriculum-h .sub{font-size:12px;color:var(--muted)}
+
+    #modules{display:flex;flex-direction:column}
+
+    /* Udemy-like rows */
+    .mod{
+      width:100%;
+      text-align:left;
+      display:flex;gap:12px;align-items:center;
+      padding:12px 14px;
+      border:0;
+      background:transparent;
+      color:inherit;
+      cursor:pointer;
+      border-bottom:1px solid rgba(148,163,184,.18);
+    }
+    .mod:last-child{border-bottom:0}
+    .mod:hover{background:rgba(255,255,255,.04)}
+    .mod.active{background:rgba(34,197,94,.10)}
+    .mod .thumb{
+      width:84px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;
+      background:rgba(0,0,0,.35);flex:0 0 auto;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .mod .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .mod .info{min-width:0;flex:1}
+    .mod .info .t{margin:0;font-weight:900;font-size:14px;line-height:1.2}
+    .mod .info .s{margin:6px 0 0;font-size:12px;color:var(--muted)}
+    .mod .meta{
+      flex:0 0 auto;
+      display:flex;align-items:center;gap:8px;
+      color:rgba(255,255,255,.85);
+      font-weight:900;
+      font-size:12px;
+    }
+    .pill{
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+
+    .err{color:#fca5a5;font-weight:800;white-space:pre-wrap;padding:12px 14px}
+
+    /* Responsive refinements */
+    @media (max-width: 520px){
+      header{padding:12px 12px}
+      .container{padding:12px 12px 24px}
+      .mod .thumb{width:74px}
+      .mod .meta{display:none}
+    }
+  
+
+    /* Layout split (tipo Udemy) en pantallas anchas / horizontal */
+    @media (min-width: 900px){
+      .container{
+        display:grid;
+        grid-template-columns: 1.45fr 1fr;
+        gap:14px;
+        align-items:start;
+      }
+      .curriculum{margin-top:0; max-height: calc(100vh - 94px); overflow:auto}
+    }
+    /* Horizontal en móvil: que no se vea gigante */
+    @media (orientation: landscape) and (max-height: 520px){
+      .container{padding:10px 10px 18px}
+      .player{padding-top:0;height: calc(100vh - 150px);}
+      iframe{height:100%}
+      .curriculum{max-height: calc(100vh - 94px); overflow:auto}
+    }
+
+
+    /* User dropdown */
+    .user-menu{position:relative}
+    .user-trigger{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:inherit;font-weight:900;cursor:pointer;
+    }
+    .user-trigger:hover{border-color:rgba(255,255,255,.28)}
+    .avatar{display:inline-flex;width:26px;height:26px;align-items:center;justify-content:center;
+      border-radius:999px;background:rgba(56,189,248,.18);border:1px solid rgba(56,189,248,.30)}
+    .caret{opacity:.85}
+    .user-dropdown{z-index:50;
+      position:absolute;right:0;top:calc(100% + 10px);
+      min-width:210px;
+      border:1px solid rgba(148,163,184,.22);
+      background:rgba(15,23,42,.96);
+      backdrop-filter: blur(10px);
+      border-radius:14px;
+      box-shadow:0 24px 60px rgba(0,0,0,.45);
+      padding:8px;
+      display:none;
+    }
+    .user-dropdown.open{display:block}
+    .dd-item{
+      width:100%;
+      display:flex;align-items:center;gap:10px;
+      padding:10px 10px;border-radius:12px;
+      text-decoration:none;
+      border:0;background:transparent;color:inherit;
+      font-weight:900;cursor:pointer;text-align:left;
+    }
+    .dd-item:hover{background:rgba(255,255,255,.06)}
+    .dd-sep{height:1px;background:rgba(148,163,184,.18);margin:6px 4px}
+    .dd-item.danger{color:#fecaca}
+
+  
+/* === Ajustes responsive mínimos, sin tocar tu estilo base === */
+.wrap{
+  display:grid;
+  grid-template-columns:minmax(260px, 320px) minmax(0, 1fr) minmax(300px, 420px);
+  gap:20px;
+  align-items:start;
+}
+.player-wrap{
+  width:100%;
+  max-width:none !important;
+  margin:0 !important;
+}
+.player{
+  width:100%;
+  min-height:auto;
+}
+.curriculum{
+  width:100%;
+  min-width:0;
+}
+#modules{
+  overflow:auto;
+}
+
+/* PC / tablet horizontal */
+@media (min-width: 901px){
+  .wrap{
+    grid-template-columns:minmax(260px, 320px) minmax(0, 1fr) minmax(320px, 460px);
+  }
+  .player-wrap{
+    position:sticky;
+    top:88px;
+  }
+  .curriculum{
+    position:sticky;
+    top:88px;
+  }
+  #modules{
+    max-height:calc(100vh - 180px);
+  }
+}
+
+/* Móvil vertical */
+@media (max-width: 900px){
+  .wrap{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  .player-wrap,
+  .curriculum{
+    position:static;
+  }
+  #modules{
+    max-height:none;
+  }
+}
+
+/* Móvil horizontal: video fijo al costado y módulos desplazables */
+@media (max-width: 950px) and (orientation: landscape){
+  .wrap{
+    grid-template-columns:minmax(200px, 0.95fr) minmax(0, 1.45fr) minmax(260px, 0.95fr);
+    gap:14px;
+    align-items:start;
+  }
+
+  .player-wrap{
+    position:sticky;
+    top:72px;
+  }
+
+  .curriculum{
+    position:sticky;
+    top:72px;
+  }
+
+  #modules{
+    max-height:calc(100vh - 150px);
+    overflow:auto;
+  }
+
+  .player{
+    min-height:auto !important;
+  }
+}
+
+/* Afinado para pantallas muy bajas en horizontal */
+@media (max-height: 500px) and (orientation: landscape){
+  .app-header{padding:4px 12px !important;height:48px !important;min-height:48px !important;}
+  .app-header .row{height:48px !important;min-height:48px !important;}
+  main.page > .container{padding-top:6px !important}
+  .wrap{gap:12px}
+  .hero h1, #courseTitle{font-size:clamp(22px, 2vw, 34px) !important;}
+  #modules{max-height:calc(100vh - 132px)}
+}
+
+</style>
+
+
+
+<style>#openYT{display:none !important;}</style>
+
+<style>
+/* ==== Player con API + controles propios ==== */
+.yt-player{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+}
+/* Controles propios (funcionan en móvil) */
+.cc-wrap{
+  display:flex; gap:10px; align-items:center; flex-wrap:nowrap;
+}
+.cc-btn{
+  width:44px; height:38px;
+  border:0; border-radius:12px;
+  background:rgba(255,255,255,.10);
+  color:#fff; font-size:18px;
+}
+.cc-seek{ flex:1; min-width: 120px; }
+.cc-time{ font-variant-numeric: tabular-nums; opacity:.85; font-size: 13px; white-space: nowrap; }
+
+/* Pantalla completa: estira el contenedor del player */
+.player-wrap:fullscreen{
+  width:100vw; height:100vh;
+  max-width:none;
+  border-radius:0;
+}
+.player-wrap:fullscreen .player{
+  padding-top:0 !important;
+  height:100vh !important;
+}
+</style>
+
+
+<style>
+/* ==== Bloquear interacción directa con el player (taps) y mostrar controles propios al tocar ==== */
+.player-wrap{ position:relative !important; }
+
+/* Cubre el área del video para que NO se puedan tocar los controles nativos */
+.tap-shield{
+  position:absolute;
+  left:0; top:0; right:0;
+  /* altura del área video (la parte superior de la card). Ajusta si cambia el layout */
+  height: calc(100% - 0px);
+  z-index: 50;
+  background: transparent;
+  pointer-events: auto;
+}
+
+/* Controles propios flotando sobre el video (abajo) */
+#ccWrap{
+  position:absolute !important;
+  left:12px; right:12px;
+  bottom:28px;
+  z-index: 60;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+/* Estado visible */
+#ccWrap.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* En horizontal/fullscreen, que el overlay y controles sigan funcionando */
+.player-wrap:fullscreen #ccWrap,
+.player-wrap:-webkit-full-screen #ccWrap{
+  left:16px; right:16px; bottom:28px;
+}
+.player-wrap:fullscreen .tap-shield,
+.player-wrap:-webkit-full-screen .tap-shield{
+  left:0; top:0; right:0; bottom:0;
+  height: 100%;
+}
+
+/* Importante: que el tapShield NO cubra los controles */
+#ccWrap{ }
+</style>
+
+
+<style>
+/* Separar título del área de controles */
+.player-meta .left{ margin-top: 22px !important; }
+
+/* Botón velocidad */
+.cc-speed{ width:56px !important; font-size:14px !important; }
+</style>
+
+
+<style>
+/* Subir controles un poco más arriba para no tapar título */
+#ccWrap{ bottom:28px !important; }
+</style>
+
+
+<style>
+/* Ocultar perfil/correo dentro del curso */
+#userMenu, #userDropdown, .user-menu, .user-dropdown, .user-chip, .profile-chip { display:none !important; }
+</style>
+
+<link rel="stylesheet" href="app.css">
+<script src="theme.js" defer></script>
+
+<style>
+/* Header PASIR Academy más delgado */
+.app-header{
+  padding:4px 12px !important;
+  height:50px !important;
+  min-height:50px !important;
+}
+
+.app-header .container{
+  padding:0 !important;
+}
+
+.app-header .row{
+  height:50px !important;
+  min-height:50px !important;
+  display:flex;
+  align-items:center;
+}
+</style>
+
+
+<style id="course-final-fixes">
+/* ===== Ajustes pedidos: reproductor más grande/cerca + botones visibles en modo claro ===== */
+
+/* subir un poco todo y dar más espacio real al reproductor */
+main.page > .container{
+  padding-top: 8px !important;
+}
+main.page > .container > .container{
+  padding: 0 !important;
+  margin-top: 4px !important;
+}
+.player-wrap{
+  max-width: 760px !important;
+  margin: 0 auto !important;
+}
+.player{
+  padding-top: 62% !important;
+}
+
+/* en móvil vertical: hacerlo un poco más grande */
+@media (max-width: 600px){
+  main.page > .container{
+    padding: 6px 10px 22px !important;
+  }
+  .player{
+    padding-top: 64% !important;
+  }
+}
+
+/* botones velocidad y expandir visibles en modo claro */
+body[data-theme="light"] #ccSpeedBtn,
+body[data-theme="light"] #ccFs,
+body[data-theme="light"] .cc-btn{
+  background: #eaf2ff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(37,99,235,.25) !important;
+}
+body[data-theme="light"] .cc-time{
+  color: #0f172a !important;
+  opacity: .92 !important;
+}
+</style>
+
+
+<style id="center-balanced-fix">
+/* === Centrar correctamente reproductor y módulos en móvil === */
+@media (max-width:700px){
+
+  main.page > .container{
+    width:100% !important;
+    max-width:680px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding:6px 12px 22px 12px !important;
+  }
+
+  main.page > .container > .container{
+    width:100% !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding:0 !important;
+  }
+
+  .player-wrap,
+  .curriculum{
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+
+}
+</style>
+
+
+<style id="sticky-player-elegante">
+/* ===== Integrado: título encima del reproductor + reproductor fijo al hacer scroll ===== */
+
+/* Escritorio y tablet */
+@media (min-width: 900px){
+  main.page > .container > header{
+    max-width: 760px !important;
+    margin: 0 auto 12px auto !important;
+    display:flex !important;
+    justify-content:space-between !important;
+    align-items:center !important;
+    gap:16px !important;
+  }
+
+  #courseTitle{
+    font-size: 30px !important;
+    line-height: 1.05 !important;
+  }
+
+  .top-actions{
+    margin-left: 16px !important;
+    flex: 0 0 auto !important;
+  }
+
+  main.page > .container > .container{
+    display:grid !important;
+    grid-template-columns: minmax(0, 760px) minmax(320px, 420px) !important;
+    gap: 18px !important;
+    align-items:start !important;
+    justify-content:center !important;
+  }
+
+  .player-wrap{
+    position: sticky !important;
+    top: 76px !important;
+    align-self: start !important;
+    max-width: 760px !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .curriculum{
+    margin-top: 0 !important;
+    align-self: start !important;
+    max-height: calc(100vh - 96px) !important;
+    overflow: hidden !important;
+  }
+
+  #modules{
+    max-height: calc(100vh - 170px) !important;
+    overflow: auto !important;
+  }
+}
+
+/* Móvil horizontal */
+@media (orientation: landscape) and (max-height: 520px){
+  main.page > .container > header{
+    max-width: 760px !important;
+    margin: 0 auto 10px auto !important;
+    display:flex !important;
+    justify-content:space-between !important;
+    align-items:center !important;
+    gap:14px !important;
+  }
+
+  #courseTitle{
+    font-size: 24px !important;
+    line-height: 1.05 !important;
+  }
+
+  main.page > .container > .container{
+    display:grid !important;
+    grid-template-columns: minmax(0, 1.45fr) minmax(250px, .95fr) !important;
+    gap: 14px !important;
+    align-items:start !important;
+  }
+
+  .player-wrap{
+    position: sticky !important;
+    top: 62px !important;
+    max-width: none !important;
+    margin: 0 !important;
+    align-self: start !important;
+  }
+
+  .curriculum{
+    margin-top: 0 !important;
+    position: sticky !important;
+    top: 62px !important;
+    max-height: calc(100vh - 74px) !important;
+    overflow: hidden !important;
+  }
+
+  #modules{
+    max-height: calc(100vh - 148px) !important;
+    overflow: auto !important;
+  }
+}
+</style>
+
+
+<style id="course-progress-ui">
+.mod.done{background:rgba(34,197,94,.16)!important}
+.mod.done .t::before{content:"✔ ";color:#22c55e;font-weight:1000}
+.mod.current .t::before{content:"▶ ";color:#38bdf8;font-weight:1000}
+.mod .s.completed-text{color:#86efac!important;font-weight:800}
+#courseProgressBadge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);font-weight:900;font-size:12px}
+body[data-theme="light"] #courseProgressBadge{border-color:rgba(37,99,235,.20);background:#eef6ff;color:#0f172a}
+</style>
+
+
+<style id="course-clean-player-ui">
+.player{overflow:hidden}
+.player.is-loading .player-poster{opacity:1;pointer-events:auto}
+.player-poster{
+  position:absolute;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;
+  background:#050b16;opacity:0;pointer-events:none;transition:opacity .22s ease
+}
+.player-poster img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.82)
+}
+.player-poster::after{
+  content:"";position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.34), rgba(0,0,0,.12))
+}
+.player-loading-card{
+  position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px;
+  padding:16px 18px;border-radius:16px;background:rgba(15,23,42,.46);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.12);color:#fff;font-weight:900
+}
+.player-spinner{
+  width:42px;height:42px;border-radius:999px;border:3px solid rgba(255,255,255,.22);
+  border-top-color:#fff;animation:spinCourse 1s linear infinite
+}
+@keyframes spinCourse{to{transform:rotate(360deg)}}
+.player-replay{
+  display:none;position:relative;z-index:2;align-items:center;justify-content:center;gap:10px;
+  padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(15,23,42,.58);color:#fff;font-weight:1000;cursor:pointer
+}
+.player-poster.is-ended .player-loading-card{display:none}
+.player-poster.is-ended .player-replay{display:inline-flex}
+</style>
+
+
+<style id="youtube-cover-bars">
+/* Barras para cubrir elementos visuales de YouTube al iniciar */
+.player-brand-top,
+.player-brand-bottom{
+  position:absolute;
+  left:0;
+  right:0;
+  z-index:85;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 16px;
+  background:#0f172a;
+  color:#ffffff;
+  text-align:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease;
+}
+.player-brand-top{
+  top:0;
+  min-height:52px;
+}
+.player-brand-bottom{
+  bottom:0;
+  min-height:56px;
+}
+.player.show-brand-bars .player-brand-top,
+.player.show-brand-bars .player-brand-bottom{
+  opacity:1;
+}
+.player-brand-course,
+.player-brand-module{
+  width:100%;
+  text-align:center;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-weight:1000;
+  letter-spacing:.3px;
+}
+.player-brand-course{font-size:15px}
+.player-brand-module{font-size:14px}
+body[data-theme="light"] .player-brand-top,
+body[data-theme="light"] .player-brand-bottom{
+  background:#ffffff;
+  color:#0f172a;
+}
+</style>
+
+
+<style id="player-start-cover-ui">
+.player{overflow:hidden}
+.player-start-cover{
+  position:absolute;
+  inset:0;
+  z-index:92;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#08101d;
+  color:#fff;
+  opacity:1;
+  pointer-events:auto;
+  transition:opacity .22s ease;
+}
+.player-start-cover.hide{
+  opacity:0;
+  pointer-events:none;
+}
+.player-start-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  padding:18px 20px;
+  border-radius:18px;
+  background:rgba(15,23,42,.55);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(8px);
+  text-align:center;
+  max-width:min(86%, 360px);
+}
+.player-start-spinner{
+  width:42px;
+  height:42px;
+  border-radius:999px;
+  border:3px solid rgba(255,255,255,.22);
+  border-top-color:#fff;
+  animation:playerStartSpin 1s linear infinite;
+}
+.player-start-title{font-weight:1000;font-size:16px}
+.player-start-text{font-size:13px;opacity:.86}
+@keyframes playerStartSpin{to{transform:rotate(360deg)}}
+body[data-theme="light"] .player-start-cover{background:#eaf2fb;color:#0f172a}
+body[data-theme="light"] .player-start-card{background:rgba(255,255,255,.78);border-color:rgba(37,99,235,.18)}
+</style>
+
+
+<style id="pasir-course-visual-only">
+/* ===== SOLO CAMBIO VISUAL · MISMO HTML / MISMA LÓGICA ===== */
+
+:root{
+  --bg:#f3f5f9 !important;
+  --panel:#ffffff !important;
+  --panel2:#ffffff !important;
+  --stroke:#d8dee8 !important;
+  --text:#0f172a !important;
+  --muted:#64748b !important;
+  --green:#22c55e !important;
+  --blue:#38bdf8 !important;
+  --blue-dark:#2563eb !important;
+  --shadow-soft:0 18px 40px rgba(15,23,42,.08);
+}
+
+body{
+  background:var(--bg) !important;
+  color:var(--text) !important;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif !important;
+}
+
+/* Header de marca */
+.app-header{
+  background:transparent !important;
+  border-bottom:none !important;
+  box-shadow:none !important;
+  position:relative !important;
+  height:auto !important;
+  min-height:auto !important;
+  padding:0 !important;
+}
+.app-header .container{
+  width:min(1100px,92vw) !important;
+  margin:0 auto !important;
+  padding:0 !important;
+}
+.app-header .row{
+  display:flex !important;
+  justify-content:space-between !important;
+  align-items:center !important;
+  padding:18px 0 8px !important;
+  height:auto !important;
+  min-height:auto !important;
+}
+.app-header .brand{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  color:#0f1b55 !important;
+  font-weight:900 !important;
+  font-size:1.05rem !important;
+}
+.app-header .brand .dot{
+  background:var(--blue) !important;
+  box-shadow:0 0 0 6px rgba(56,189,248,.14) !important;
+}
+.theme-btn{
+  border:1px solid rgba(37,99,235,.14) !important;
+  background:#fff !important;
+  color:var(--text) !important;
+  box-shadow:0 8px 18px rgba(15,23,42,.05) !important;
+  border-radius:999px !important;
+}
+
+/* Contenedor principal */
+main.page > .container{
+  width:min(1100px,92vw) !important;
+  margin:0 auto !important;
+  padding:14px 0 32px !important;
+}
+
+/* Cabecera del curso */
+main.page > .container > header{
+  background:transparent !important;
+  border:none !important;
+  padding:0 0 18px 0 !important;
+  margin:0 0 4px 0 !important;
+}
+#courseTitle{
+  color:#111827 !important;
+  font-weight:900 !important;
+  letter-spacing:-.04em !important;
+  font-size:clamp(2rem,4.6vw,3.4rem) !important;
+  line-height:.95 !important;
+}
+#nowPlaying,
+.muted,
+.curriculum-h .sub,
+#countMods{
+  color:var(--muted) !important;
+}
+
+/* Botones */
+.topbtn,
+.smallbtn,
+.user-trigger{
+  background:#fff !important;
+  color:#1d4ed8 !important;
+  border:1px solid rgba(37,99,235,.16) !important;
+  box-shadow:0 8px 18px rgba(15,23,42,.04) !important;
+}
+.topbtn.secondary{
+  background:#fff !important;
+  color:#1d4ed8 !important;
+}
+.user-trigger{
+  color:var(--text) !important;
+}
+.avatar{
+  background:rgba(56,189,248,.10) !important;
+  border:1px solid rgba(56,189,248,.24) !important;
+}
+.user-dropdown{
+  border:1px solid rgba(37,99,235,.14) !important;
+  background:#fff !important;
+  color:var(--text) !important;
+  box-shadow:0 20px 40px rgba(15,23,42,.10) !important;
+}
+.dd-item:hover{
+  background:rgba(56,189,248,.08) !important;
+}
+.dd-item.danger{
+  color:#dc2626 !important;
+}
+
+/* Player y panel */
+.player-wrap,
+.curriculum{
+  background:#fff !important;
+  border:1px solid rgba(37,99,235,.12) !important;
+  box-shadow:var(--shadow-soft) !important;
+  border-radius:20px !important;
+}
+.player{
+  background:#0b1220 !important;
+}
+.player-meta,
+.curriculum-h{
+  background:#fff !important;
+  border-color:rgba(37,99,235,.12) !important;
+}
+.player-meta .left .now{
+  color:#111827 !important;
+}
+.player-meta .left .hint{
+  color:var(--muted) !important;
+}
+
+/* Controles propios */
+.cc-btn,
+.cc-speed,
+#ccPlay,
+#ccFs{
+  background:#eef6ff !important;
+  color:#0f172a !important;
+  border:1px solid rgba(37,99,235,.20) !important;
+}
+.cc-time{
+  color:var(--muted) !important;
+}
+.cc-seek{
+  accent-color:#2563eb !important;
+}
+
+/* Módulos */
+.mod{
+  color:var(--text) !important;
+  border-bottom:1px solid rgba(37,99,235,.08) !important;
+}
+.mod:hover{
+  background:rgba(56,189,248,.06) !important;
+}
+.mod.active{
+  background:rgba(56,189,248,.12) !important;
+}
+.mod.done{
+  background:rgba(34,197,94,.10) !important;
+}
+.mod .thumb{
+  background:#eef6ff !important;
+  border:1px solid rgba(37,99,235,.14) !important;
+}
+.mod .info .t{
+  color:#111827 !important;
+}
+.mod .info .s,
+.mod .meta{
+  color:var(--muted) !important;
+}
+#courseProgressBadge,
+.pill{
+  background:rgba(56,189,248,.10) !important;
+  color:#1d4ed8 !important;
+  border:1px solid rgba(56,189,248,.20) !important;
+}
+
+/* overlays del reproductor */
+.player-brand-top,
+.player-brand-bottom{
+  background:#ffffff !important;
+  color:#0f172a !important;
+}
+.player-start-cover{
+  background:#edf5ff !important;
+  color:#0f172a !important;
+}
+.player-start-card,
+.player-loading-card{
+  background:rgba(255,255,255,.92) !important;
+  color:#0f172a !important;
+  border:1px solid rgba(37,99,235,.14) !important;
+}
+.player-spinner,
+.player-start-spinner{
+  border-color:rgba(37,99,235,.16) !important;
+  border-top-color:#2563eb !important;
+}
+.player-replay{
+  background:rgba(255,255,255,.92) !important;
+  color:#0f172a !important;
+  border:1px solid rgba(37,99,235,.16) !important;
+}
+
+/* errores */
+.err{
+  color:#dc2626 !important;
+  background:rgba(239,68,68,.08) !important;
+  border:1px solid rgba(239,68,68,.16) !important;
+  border-radius:12px !important;
+}
+
+/* móvil */
+@media (max-width:700px){
+  main.page > .container{
+    width:min(1100px,94vw) !important;
+    padding:12px 0 26px !important;
+  }
+}
+</style>
+
+
+<script id="pasir-theme-init">
+(function(){
+  try{
+    var saved = localStorage.getItem('pasir-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+  }catch(e){
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+})();
+</script>
+
+<style id="pasir-common-dark-fix">
+html[data-theme="dark"] body,
+body[data-theme="dark"]{
+  background:#0b1220 !important;
+  color:#f9fafb !important;
+}
+
+html[data-theme="dark"] body *,
+body[data-theme="dark"] *{
+  scrollbar-color:#475569 #0f172a;
+}
+
+body[data-theme="dark"] .muted,
+body[data-theme="dark"] .sub,
+body[data-theme="dark"] p,
+body[data-theme="dark"] small,
+body[data-theme="dark"] .desc,
+body[data-theme="dark"] .helper-links a,
+body[data-theme="dark"] .bottom-text,
+body[data-theme="dark"] .course-sub,
+body[data-theme="dark"] .progress-meta,
+body[data-theme="dark"] .curriculum-h .sub,
+body[data-theme="dark"] #countMods{
+  color:#94a3b8 !important;
+}
+
+body[data-theme="dark"] h1,
+body[data-theme="dark"] h2,
+body[data-theme="dark"] h3,
+body[data-theme="dark"] h4,
+body[data-theme="dark"] .title,
+body[data-theme="dark"] .register-title,
+body[data-theme="dark"] .login-title,
+body[data-theme="dark"] #courseTitle,
+body[data-theme="dark"] .course-title,
+body[data-theme="dark"] .brand,
+body[data-theme="dark"] .brand h1,
+body[data-theme="dark"] .brand-title,
+body[data-theme="dark"] .hero h1,
+body[data-theme="dark"] .hero h2,
+body[data-theme="dark"] .hero-copy,
+body[data-theme="dark"] .benefit-detail h3,
+body[data-theme="dark"] .price .normal-label,
+body[data-theme="dark"] .price .was{
+  color:#f8fafc !important;
+}
+
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .hero,
+body[data-theme="dark"] .section,
+body[data-theme="dark"] .section-head,
+body[data-theme="dark"] .bundle,
+body[data-theme="dark"] .how,
+body[data-theme="dark"] .curriculum,
+body[data-theme="dark"] .player-meta,
+body[data-theme="dark"] .curriculum-h,
+body[data-theme="dark"] .player-wrap,
+body[data-theme="dark"] .course,
+body[data-theme="dark"] .course-card,
+body[data-theme="dark"] .user-dropdown,
+body[data-theme="dark"] .currency-pop,
+body[data-theme="dark"] .currency-select,
+body[data-theme="dark"] .iconbtn,
+body[data-theme="dark"] .toggle,
+body[data-theme="dark"] .theme-btn,
+body[data-theme="dark"] .user-trigger,
+body[data-theme="dark"] .input-wrap,
+body[data-theme="dark"] .product-info,
+body[data-theme="dark"] .payment-container,
+body[data-theme="dark"] .method-details{
+  background:#0f172a !important;
+  color:#f8fafc !important;
+  border-color:rgba(148,163,184,.22) !important;
+}
+
+body[data-theme="dark"] .input-wrap input,
+body[data-theme="dark"] .eye-btn,
+body[data-theme="dark"] .currency-select{
+  background:#0f172a !important;
+  color:#f8fafc !important;
+}
+
+body[data-theme="dark"] .input-wrap input::placeholder{
+  color:#94a3b8 !important;
+}
+
+body[data-theme="dark"] .btn.secondary,
+body[data-theme="dark"] .btn.ghost,
+body[data-theme="dark"] .topbtn.secondary,
+body[data-theme="dark"] .smallbtn{
+  background:#162033 !important;
+  color:#e2e8f0 !important;
+  border-color:rgba(148,163,184,.22) !important;
+}
+
+body[data-theme="dark"] .tag,
+body[data-theme="dark"] .chip,
+body[data-theme="dark"] .pill,
+body[data-theme="dark"] #courseProgressBadge,
+body[data-theme="dark"] .course-badge{
+  background:rgba(56,189,248,.14) !important;
+  color:#bfdbfe !important;
+  border-color:rgba(56,189,248,.24) !important;
+}
+
+body[data-theme="dark"] .price-current,
+body[data-theme="dark"] .price .now,
+body[data-theme="dark"] .bundle-price,
+body[data-theme="dark"] .logicsoft-plan-price .now{
+  color:#86efac !important;
+}
+
+body[data-theme="dark"] .price-normal,
+body[data-theme="dark"] .price-normal-label{
+  color:#cbd5e1 !important;
+}
+
+body[data-theme="dark"] .section::before{
+  opacity:.9;
+}
+
+body[data-theme="dark"] .hero .chip,
+body[data-theme="dark"] .hero .tag,
+body[data-theme="dark"] .hero .hero-badge{
+  background:rgba(56,189,248,.14) !important;
+  color:#bfdbfe !important;
+  border-color:rgba(56,189,248,.24) !important;
+}
+
+body[data-theme="dark"] .course-thumb,
+body[data-theme="dark"] .thumb,
+body[data-theme="dark"] .mod .thumb{
+  background:#111827 !important;
+}
+
+body[data-theme="dark"] .whatsapp-float-label{
+  background:#f8fafc !important;
+  color:#0f172a !important;
+}
+</style>
+
+<style id="pasir-course-dark-fix">
+body[data-theme="dark"] .player{
+  background:#020617 !important;
+}
+body[data-theme="dark"] .cc-btn,
+body[data-theme="dark"] .cc-speed,
+body[data-theme="dark"] #ccSpeedBtn,
+body[data-theme="dark"] #ccFs,
+body[data-theme="dark"] #ccPlay{
+  background:#162033 !important;
+  color:#f8fafc !important;
+  border-color:rgba(148,163,184,.22) !important;
+}
+body[data-theme="dark"] .cc-time{color:#cbd5e1 !important}
+body[data-theme="dark"] .mod .info .t,
+body[data-theme="dark"] .player-meta .left .now{color:#f8fafc !important}
+body[data-theme="dark"] .mod .info .s,
+body[data-theme="dark"] .player-meta .left .hint{color:#94a3b8 !important}
+body[data-theme="dark"] .player-brand-top,
+body[data-theme="dark"] .player-brand-bottom{
+  background:#0f172a !important;
+  color:#f8fafc !important;
+}
+</style>
+
+
+<style id="course-premium-refresh">
+/* ===== Refresh visual premium · integra sin romper lógica ===== */
+:root{
+  --pa-bg:#eef3f9;
+  --pa-card:#ffffff;
+  --pa-card-2:#f8fbff;
+  --pa-stroke:#d9e3f0;
+  --pa-text:#0f172a;
+  --pa-muted:#64748b;
+  --pa-primary:#2563eb;
+  --pa-primary-soft:rgba(37,99,235,.10);
+  --pa-success:#16a34a;
+  --pa-shadow:0 18px 50px rgba(15,23,42,.08);
+  --pa-shadow-soft:0 10px 26px rgba(15,23,42,.05);
+}
+
+html,body{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(circle at top left, rgba(56,189,248,.10), transparent 24%),
+    linear-gradient(180deg, #f7fbff 0%, #eef3f9 100%) !important;
+}
+
+.app-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:40 !important;
+  backdrop-filter:blur(14px);
+  background:rgba(247,251,255,.78) !important;
+  border-bottom:1px solid rgba(37,99,235,.08) !important;
+}
+.app-header .row{padding:12px 0 !important}
+.app-header .brand{
+  gap:12px !important;
+  font-size:1rem !important;
+  letter-spacing:.2px;
+}
+.app-header .brand .dot{
+  width:10px;height:10px;border-radius:999px;
+}
+
+main.page > .container{
+  padding-top:18px !important;
+  padding-bottom:34px !important;
+}
+
+main.page > .container > header{
+  padding-bottom:18px !important;
+  margin-bottom:6px !important;
+  align-items:flex-end !important;
+}
+main.page > .container > header > div:first-child{
+  min-width:0;
+}
+#courseTitle{
+  font-size:clamp(2.05rem,4.8vw,3.35rem) !important;
+  line-height:.94 !important;
+  letter-spacing:-.055em !important;
+  margin-bottom:10px !important;
+}
+#nowPlaying{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.75);
+  border:1px solid rgba(37,99,235,.12);
+  box-shadow:var(--pa-shadow-soft);
+  color:#475569 !important;
+  font-weight:700;
+  font-size:13px;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#nowPlaying:before{
+  content:"●";
+  color:#22c55e;
+  font-size:12px;
+  flex:0 0 auto;
+}
+
+.top-actions{gap:12px !important}
+.topbtn,.smallbtn,.theme-btn{
+  border-radius:14px !important;
+  height:44px;
+  padding:0 14px !important;
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  font-weight:900 !important;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+.topbtn:hover,.smallbtn:hover,.theme-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 14px 28px rgba(37,99,235,.10) !important;
+  border-color:rgba(37,99,235,.22) !important;
+}
+.topbtn.secondary{
+  background:linear-gradient(180deg,#ffffff,#f4f8ff) !important;
+  color:#1d4ed8 !important;
+}
+.player-wrap,.curriculum{
+  border-radius:24px !important;
+  overflow:hidden !important;
+  border:1px solid rgba(37,99,235,.10) !important;
+  box-shadow:var(--pa-shadow) !important;
+}
+.player-wrap{
+  background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%) !important;
+}
+.player{
+  background:
+    radial-gradient(circle at top, rgba(59,130,246,.10), transparent 30%),
+    #08101d !important;
+}
+.player::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0 0;
+  height:72px;
+  background:linear-gradient(to top, rgba(0,0,0,.28), transparent);
+  pointer-events:none;
+  z-index:1;
+}
+
+.player-meta{
+  padding:16px 18px 18px !important;
+  gap:16px !important;
+}
+.player-meta .left{margin-top:0 !important}
+.player-meta .left .now{
+  font-size:1rem;
+  line-height:1.2;
+  letter-spacing:-.02em;
+}
+.player-meta .left .hint{
+  margin-top:6px !important;
+  font-size:12px !important;
+}
+
+.cc-wrap{
+  gap:8px !important;
+  padding:8px 10px;
+  border-radius:16px;
+  background:rgba(248,250,252,.94);
+  border:1px solid rgba(37,99,235,.10);
+  box-shadow:0 12px 24px rgba(15,23,42,.08);
+}
+.cc-btn{
+  border:1px solid rgba(37,99,235,.12) !important;
+  border-radius:12px !important;
+  width:42px !important;
+  height:38px !important;
+  font-size:16px !important;
+  font-weight:900;
+  transition:transform .15s ease, background .15s ease;
+}
+.cc-btn:hover{transform:translateY(-1px)}
+.cc-speed{width:58px !important}
+.cc-seek{height:4px}
+.cc-time{font-size:12px !important;font-weight:800}
+
+.curriculum{
+  background:linear-gradient(180deg,#ffffff 0%,#f9fbff 100%) !important;
+}
+.curriculum-h{
+  padding:16px 18px !important;
+  background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%) !important;
+}
+.curriculum-h h2{
+  font-size:17px !important;
+  font-weight:1000 !important;
+  color:#0f172a !important;
+}
+.curriculum-h .sub{font-size:12px !important}
+#courseProgressBadge{
+  padding:7px 12px !important;
+  font-size:12px !important;
+  border-radius:999px !important;
+  background:rgba(37,99,235,.08) !important;
+  color:#1d4ed8 !important;
+  border:1px solid rgba(37,99,235,.14) !important;
+}
+
+#modules{padding:8px}
+.mod{
+  margin:0 0 8px 0;
+  border:1px solid rgba(37,99,235,.08) !important;
+  border-radius:18px !important;
+  background:rgba(255,255,255,.82) !important;
+  padding:12px !important;
+  box-shadow:0 8px 22px rgba(15,23,42,.03);
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
+}
+.mod:last-child{margin-bottom:0}
+.mod:hover{
+  transform:translateY(-1px);
+  box-shadow:0 16px 30px rgba(37,99,235,.07);
+  border-color:rgba(37,99,235,.18) !important;
+  background:#ffffff !important;
+}
+.mod.active{
+  background:linear-gradient(180deg, rgba(37,99,235,.10), rgba(56,189,248,.10)) !important;
+  border-color:rgba(37,99,235,.20) !important;
+}
+.mod.current{
+  box-shadow:0 16px 32px rgba(37,99,235,.11);
+}
+.mod.done{
+  border-color:rgba(22,163,74,.18) !important;
+  background:linear-gradient(180deg, rgba(22,163,74,.08), rgba(34,197,94,.05)) !important;
+}
+.mod .thumb{
+  width:96px !important;
+  border-radius:14px !important;
+  box-shadow:0 8px 16px rgba(15,23,42,.10);
+}
+.mod .thumb img{transition:transform .3s ease}
+.mod:hover .thumb img{transform:scale(1.04)}
+.mod .info .t{
+  font-size:14px !important;
+  line-height:1.25 !important;
+  letter-spacing:-.015em;
+}
+.mod .info .s{
+  margin-top:7px !important;
+  font-size:12px !important;
+  font-weight:700;
+}
+.mod .meta,.pill{
+  font-size:11px !important;
+}
+.mod.current .info .s{
+  color:#2563eb !important;
+  font-weight:900;
+}
+.mod.done .info .s{
+  color:#16a34a !important;
+}
+
+.err{
+  margin:8px;
+  border-radius:14px;
+  background:#fff1f2 !important;
+  border:1px solid #fecdd3 !important;
+  color:#be123c !important;
+}
+
+.player-start-card,.player-loading-card,.player-replay{
+  box-shadow:0 18px 38px rgba(15,23,42,.18);
+  border-radius:18px !important;
+}
+
+@media (min-width:900px){
+  main.page > .container > .container{
+    gap:22px !important;
+    grid-template-columns:minmax(0, 780px) minmax(330px, 420px) !important;
+  }
+  .player-wrap{top:84px !important}
+  .curriculum{top:84px !important; max-height:calc(100vh - 108px) !important}
+  #modules{max-height:calc(100vh - 186px) !important}
+}
+
+@media (max-width:700px){
+  main.page > .container{width:min(1100px,95vw) !important}
+  #courseTitle{
+    font-size:clamp(1.9rem,8vw,2.5rem) !important;
+    line-height:.98 !important;
+  }
+  #nowPlaying{
+    display:flex;
+    width:100%;
+    white-space:normal;
+    border-radius:16px;
+    padding:11px 12px;
+  }
+  main.page > .container > header{
+    gap:12px !important;
+    align-items:stretch !important;
+  }
+  .top-actions{width:100%}
+  .topbtn.secondary{
+    width:100%;
+    justify-content:center;
+  }
+  .player-wrap,.curriculum{border-radius:20px !important}
+  .player{padding-top:61% !important}
+  .player-meta{
+    padding:14px 14px 16px !important;
+    flex-direction:column;
+    align-items:stretch !important;
+  }
+  .player-meta .right{
+    width:100%;
+    justify-content:stretch !important;
+  }
+  .cc-wrap{
+    width:100%;
+    padding:8px;
+  }
+  .mod{padding:10px !important;border-radius:16px !important}
+  .mod .thumb{width:88px !important}
+}
+
+body[data-theme="dark"]{
+  background:
+    radial-gradient(circle at top left, rgba(56,189,248,.08), transparent 20%),
+    linear-gradient(180deg,#09111f 0%,#0b1220 100%) !important;
+}
+body[data-theme="dark"] .app-header{
+  background:rgba(9,17,31,.82) !important;
+  border-bottom:1px solid rgba(148,163,184,.10) !important;
+}
+body[data-theme="dark"] #nowPlaying{
+  background:rgba(15,23,42,.84) !important;
+  border-color:rgba(148,163,184,.14) !important;
+  color:#cbd5e1 !important;
+  box-shadow:none !important;
+}
+body[data-theme="dark"] .player-wrap,
+body[data-theme="dark"] .curriculum{
+  background:linear-gradient(180deg,#0f172a 0%,#0b1324 100%) !important;
+  border-color:rgba(148,163,184,.16) !important;
+  box-shadow:0 18px 50px rgba(0,0,0,.32) !important;
+}
+body[data-theme="dark"] .curriculum-h,
+body[data-theme="dark"] .player-meta{
+  background:rgba(15,23,42,.82) !important;
+}
+body[data-theme="dark"] .cc-wrap{
+  background:rgba(15,23,42,.96) !important;
+  border-color:rgba(148,163,184,.16) !important;
+  box-shadow:none !important;
+}
+body[data-theme="dark"] .mod{
+  background:rgba(15,23,42,.76) !important;
+  border-color:rgba(148,163,184,.12) !important;
+  box-shadow:none !important;
+}
+body[data-theme="dark"] .mod:hover{
+  background:rgba(17,24,39,.98) !important;
+  border-color:rgba(56,189,248,.22) !important;
+  box-shadow:0 16px 28px rgba(0,0,0,.26) !important;
+}
+body[data-theme="dark"] .mod.active{
+  background:linear-gradient(180deg, rgba(30,64,175,.24), rgba(56,189,248,.14)) !important;
+  border-color:rgba(56,189,248,.24) !important;
+}
+body[data-theme="dark"] .mod.done{
+  background:linear-gradient(180deg, rgba(20,83,45,.38), rgba(15,23,42,.9)) !important;
+  border-color:rgba(34,197,94,.24) !important;
+}
+body[data-theme="dark"] #courseProgressBadge{
+  background:rgba(56,189,248,.14) !important;
+  color:#dbeafe !important;
+  border-color:rgba(56,189,248,.20) !important;
+}
+body[data-theme="dark"] .topbtn.secondary,
+body[data-theme="dark"] .theme-btn{
+  background:#162033 !important;
+  color:#e2e8f0 !important;
+  border-color:rgba(148,163,184,.18) !important;
+  box-shadow:none !important;
+}
+</style>
+
+
+<style id="udemy-premium-header-mobile-fix">
+/* ===== Ajuste premium tipo Udemy: header compacto + mejor móvil ===== */
+main.page > .container > header{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  align-items:center !important;
+  gap:14px 18px !important;
+  padding-bottom:14px !important;
+  margin-bottom:10px !important;
+}
+main.page > .container > header > div:first-child{
+  min-width:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+}
+#courseTitle{
+  font-size:clamp(1.18rem,2vw,1.8rem) !important;
+  line-height:1.18 !important;
+  letter-spacing:-.028em !important;
+  margin:0 !important;
+  max-width:28ch !important;
+  font-weight:900 !important;
+}
+#nowPlaying{
+  display:inline-flex !important;
+  width:auto !important;
+  max-width:min(100%, 620px) !important;
+  padding:8px 12px !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  border-radius:999px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.top-actions{
+  align-self:start !important;
+  justify-content:flex-end !important;
+  width:auto !important;
+  flex-wrap:nowrap !important;
+}
+.topbtn.secondary{
+  min-width:auto !important;
+  width:auto !important;
+  height:42px !important;
+  padding:0 14px !important;
+  border-radius:12px !important;
+  white-space:nowrap !important;
+}
+
+@media (min-width:900px){
+  main.page > .container > .container{
+    grid-template-columns:minmax(0,1.58fr) minmax(310px,.9fr) !important;
+    gap:18px !important;
+  }
+  .player-wrap{
+    max-width:none !important;
+    top:82px !important;
+  }
+  .curriculum{
+    top:82px !important;
+    max-height:calc(100vh - 104px) !important;
+  }
+  #modules{max-height:calc(100vh - 178px) !important;}
+}
+
+@media (max-width:900px){
+  main.page > .container > header{
+    grid-template-columns:1fr !important;
+    align-items:stretch !important;
+    gap:10px !important;
+  }
+  .top-actions{
+    justify-content:flex-start !important;
+  }
+  .topbtn.secondary{
+    width:auto !important;
+  }
+}
+
+@media (max-width:700px){
+  main.page > .container{
+    width:min(1100px,96vw) !important;
+    padding-top:12px !important;
+  }
+  .app-header .row{
+    padding:10px 0 !important;
+  }
+  main.page > .container > header{
+    padding-bottom:10px !important;
+    margin-bottom:8px !important;
+  }
+  #courseTitle{
+    font-size:clamp(1.08rem,4.7vw,1.34rem) !important;
+    line-height:1.22 !important;
+    max-width:100% !important;
+  }
+  #nowPlaying{
+    display:flex !important;
+    width:100% !important;
+    max-width:100% !important;
+    white-space:nowrap !important;
+    padding:8px 11px !important;
+    font-size:11.5px !important;
+    border-radius:13px !important;
+  }
+  .top-actions{
+    width:100% !important;
+    justify-content:flex-start !important;
+  }
+  .topbtn.secondary{
+    width:auto !important;
+    min-height:40px !important;
+    padding:0 13px !important;
+    font-size:13px !important;
+  }
+  .player-wrap,
+  .curriculum{
+    border-radius:18px !important;
+  }
+  .curriculum-h{
+    padding:14px 14px !important;
+  }
+  #modules{
+    padding:6px !important;
+  }
+  .mod{
+    gap:10px !important;
+    padding:10px !important;
+    margin-bottom:7px !important;
+  }
+  .mod .thumb{
+    width:82px !important;
+    border-radius:12px !important;
+  }
+  .mod .info .t{
+    font-size:13px !important;
+    line-height:1.22 !important;
+  }
+  .mod .info .s{
+    font-size:11.5px !important;
+    margin-top:5px !important;
+  }
+  .player{
+    padding-top:56.25% !important;
+  }
+  .player-meta{
+    padding:12px 12px 14px !important;
+    gap:10px !important;
+  }
+  .player-meta .left .now{
+    font-size:14px !important;
+  }
+  .cc-wrap{
+    width:100% !important;
+    gap:6px !important;
+    padding:7px !important;
+    border-radius:14px !important;
+  }
+  .cc-btn{
+    width:38px !important;
+    height:36px !important;
+    font-size:15px !important;
+  }
+  .cc-speed{width:50px !important;}
+  .cc-time{
+    font-size:11px !important;
+  }
+}
+
+@media (max-width:420px){
+  #courseTitle{
+    font-size:1.02rem !important;
+  }
+  #nowPlaying{
+    font-size:11px !important;
+  }
+  .topbtn.secondary{
+    font-size:12.5px !important;
+  }
+  .mod .thumb{
+    width:76px !important;
+  }
+}
+
+body[data-theme="dark"] #courseTitle{color:#f8fafc !important;}
+body[data-theme="dark"] #nowPlaying{
+  background:rgba(15,23,42,.88) !important;
+  color:#cbd5e1 !important;
+}
+</style>
+
+
+<style id="player-skip-and-zoom-upgrades">
+.cc-btn.cc-skip{
+  width:54px !important;
+  font-size:13px !important;
+  font-weight:1000 !important;
+  letter-spacing:-.02em;
+}
+@media (max-width:700px){
+  .cc-btn.cc-skip{
+    width:50px !important;
+    font-size:12px !important;
+  }
+}
+.player-zoom-surface{
+  position:absolute;
+  inset:0;
+  transform-origin:center center;
+  will-change:transform;
+  touch-action:none;
+}
+</style>
+
+
+<style id="mobile-controls-and-zoom-fix">
+.zoom-hint{display:none !important;}
+
+/* Compactar controles solo en móvil/tablet vertical */
+@media (max-width: 900px) and (orientation: portrait){
+  .cc-wrap{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    gap:4px !important;
+    padding:6px !important;
+    width:100% !important;
+    overflow:hidden !important;
+  }
+  .cc-btn{
+    width:34px !important;
+    min-width:34px !important;
+    height:34px !important;
+    padding:0 !important;
+    font-size:13px !important;
+    border-radius:10px !important;
+    flex:0 0 auto !important;
+  }
+  .cc-btn.cc-skip{
+    width:38px !important;
+    min-width:38px !important;
+    font-size:10px !important;
+    letter-spacing:-.04em !important;
+  }
+  .cc-speed,
+  #ccSpeedBtn{
+    width:40px !important;
+    min-width:40px !important;
+    font-size:10px !important;
+  }
+  #ccFs{
+    width:34px !important;
+    min-width:34px !important;
+    display:inline-flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+  }
+  #ccSeek{
+    flex:1 1 auto !important;
+    min-width:42px !important;
+    width:auto !important;
+    margin:0 !important;
+  }
+  #ccTime{
+    flex:0 0 auto !important;
+    font-size:10px !important;
+    white-space:nowrap !important;
+    max-width:64px !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+}
+</style>
+
+
+<style id="player-settings-upgrades">
+/* Botones adelantar/retroceder tipo Google Drive */
+.cc-btn.cc-skip{
+  width:42px !important;
+  min-width:42px !important;
+  height:38px !important;
+  padding:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.cc-btn.cc-skip svg{
+  width:24px;
+  height:24px;
+  display:block;
+}
+.cc-btn.cc-skip .skip-num{
+  font-size:9px;
+  font-weight:1000;
+  fill:currentColor;
+  font-family:Arial, sans-serif;
+}
+.cc-btn.cc-skip .skip-arrow{
+  stroke:currentColor;
+  stroke-width:2;
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+@media (max-width: 900px) and (orientation: portrait){
+  .cc-btn.cc-skip{
+    width:36px !important;
+    min-width:36px !important;
+    height:34px !important;
+  }
+  .cc-btn.cc-skip svg{
+    width:21px;
+    height:21px;
+  }
+  .cc-btn.cc-skip .skip-num{
+    font-size:8px;
+  }
+}
+
+/* Botón engranaje integrado a los controles */
+.player-settings-trigger{
+  position:absolute;
+  right:14px;
+  bottom:74px;
+  z-index:96;
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(15,23,42,.72);
+  color:#fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(8px);
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+  opacity:0;
+  transform:translateY(8px);
+  pointer-events:none;
+  transition:opacity .18s ease, transform .18s ease;
+}
+.player-settings-trigger.is-visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
+.player-settings-trigger svg{
+  width:18px;
+  height:18px;
+  display:block;
+}
+body[data-theme="light"] .player-settings-trigger{
+  background:rgba(255,255,255,.92);
+  color:#0f172a;
+  border-color:rgba(37,99,235,.16);
+}
+
+/* Botón rotar pantalla */
+.player-rotate-trigger{
+  position:absolute;
+  left:14px;
+  bottom:74px;
+  z-index:96;
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(15,23,42,.72);
+  color:#fff;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  backdrop-filter:blur(8px);
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+  opacity:0;
+  transform:translateY(8px);
+  pointer-events:none;
+  transition:opacity .18s ease, transform .18s ease;
+}
+.player-rotate-trigger svg{
+  width:18px;
+  height:18px;
+  display:block;
+}
+.player-rotate-trigger.is-visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
+body[data-theme="light"] .player-rotate-trigger{
+  background:rgba(255,255,255,.92);
+  color:#0f172a;
+  border-color:rgba(37,99,235,.16);
+}
+@media (max-width: 900px){
+  .player-rotate-trigger{
+    display:inline-flex;
+  }
+}
+
+/* Panel de ajustes */
+.player-settings-panel{
+  position:absolute;
+  top:60px;
+  right:14px;
+  z-index:97;
+  width:min(260px, calc(100vw - 32px));
+  border-radius:16px;
+  background:rgba(15,23,42,.92);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 20px 40px rgba(0,0,0,.28);
+  backdrop-filter:blur(12px);
+  padding:10px;
+  display:none;
+}
+.player-settings-panel.open{
+  display:block;
+}
+.player-settings-panel h4{
+  margin:0 0 8px;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  opacity:.78;
+}
+.ps-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 0;
+}
+.ps-label{
+  font-size:13px;
+  font-weight:900;
+}
+.ps-sub{
+  font-size:11px;
+  opacity:.78;
+  margin-top:2px;
+}
+.ps-value,
+.ps-toggle{
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  padding:7px 10px;
+  font-size:12px;
+  font-weight:900;
+}
+.ps-select{
+  width:100%;
+  margin-top:8px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  padding:10px 12px;
+  font-weight:900;
+}
+.ps-select option{
+  color:#111827;
+}
+body[data-theme="light"] .player-settings-panel{
+  background:rgba(255,255,255,.96);
+  color:#0f172a;
+  border-color:rgba(37,99,235,.14);
+}
+body[data-theme="light"] .ps-value,
+body[data-theme="light"] .ps-toggle,
+body[data-theme="light"] .ps-select{
+  background:#eef6ff;
+  color:#0f172a;
+  border-color:rgba(37,99,235,.16);
+}
+
+/* Ajustar a pantalla: escala el reproductor para llenar mejor fullscreen móvil */
+.player-wrap.fit-screen-mode:fullscreen .player-zoom-surface,
+.player-wrap.fit-screen-mode:-webkit-full-screen .player-zoom-surface{
+  transform:translate3d(0,0,0) scale(var(--fit-screen-scale,1.18)) !important;
+}
+</style>
+
+
+<style id="controls-gear-rotate-fixes">
+@media (max-width:700px){
+  .player-settings-trigger,
+  .player-rotate-trigger{
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    bottom:66px;
+  }
+  .player-settings-trigger{ right:10px; }
+  .player-rotate-trigger{ left:10px; }
+}
+</style>
+
+</head>
+<body>
+  
+<header class="app-header">
+  <div class="container">
+    <div class="row">
+      <div class="brand" role="banner"><span class="dot" aria-hidden="true"></span><span>PASIR<span style="color:#38bdf8"> ESCUELA 🗲</span></span></div>
+      <div class="nav-actions">
+
+        <button class="btn theme-btn" id="theme-toggle" type="button" aria-label="Cambiar tema">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label" class="sr-only">Modo claro</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page"><div class="container">
+<header>
+    <div>
+      <div id="courseTitle">Cargando…</div>
+      <div id="nowPlaying" class="muted"></div>
+    </div>
+    <div class="top-actions">
+      <a class="topbtn secondary" href="account.html">⬅ Mis cursos</a>
+
+      <div class="user-menu" id="userMenu" style="display:none;">
+        <button class="user-trigger" id="userTrigger" aria-haspopup="menu" aria-expanded="false">
+          <span class="avatar" aria-hidden="true">👤</span>
+          <span id="userName">Cargando…</span>
+          <span class="caret" aria-hidden="true">▾</span>
+        </button>
+
+        <div class="user-dropdown" id="userDropdown" role="menu">
+          <a class="dd-item" href="account.html" role="menuitem">📚 Mis cursos</a>
+          <a class="dd-item" href="account.html" role="menuitem">👤 Mi perfil</a>
+          <div class="dd-sep"></div>
+          <button class="dd-item danger" id="logout" role="menuitem">🚪 Cerrar sesión</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="player-wrap" aria-label="Reproductor">
+      <div class="player">
+        <div id="playerZoomSurface" class="player-zoom-surface">
+        <div id="player" class="yt-player"></div>
+
+        <button id="playerSettingsBtn" class="player-settings-trigger" type="button" aria-label="Más ajustes">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 8.8A3.2 3.2 0 1 0 12 15.2A3.2 3.2 0 1 0 12 8.8Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M19.4 13.5c.06-.49.06-1.01 0-1.5l1.62-1.26a.74.74 0 0 0 .18-.94l-1.54-2.67a.75.75 0 0 0-.9-.33l-1.9.76a7.72 7.72 0 0 0-1.3-.76l-.28-2.02a.74.74 0 0 0-.74-.63h-3.08a.74.74 0 0 0-.74.63l-.28 2.02c-.46.18-.9.43-1.3.76l-1.9-.76a.75.75 0 0 0-.9.33L2.8 9.85a.74.74 0 0 0 .18.94L4.6 12c-.06.49-.06 1.01 0 1.5L2.98 14.76a.74.74 0 0 0-.18.94l1.54 2.67c.18.3.55.44.9.33l1.9-.76c.4.33.84.58 1.3.76l.28 2.02c.06.36.37.63.74.63h3.08c.37 0 .68-.27.74-.63l.28-2.02c.46-.18.9-.43 1.3-.76l1.9.76c.35.11.72-.03.9-.33l1.54-2.67a.74.74 0 0 0-.18-.94L19.4 13.5Z" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </button>
+
+        <button id="playerRotateBtn" class="player-rotate-trigger" type="button" aria-label="Rotar pantalla">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 8V4m0 0H3m4 0L4.5 6.5A7 7 0 1 1 6 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17 16v4m0 0h4m-4 0l2.5-2.5A7 7 0 1 1 18 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div id="playerSettingsPanel" class="player-settings-panel" aria-label="Ajustes del reproductor">
+          <h4>Más ajustes</h4>
+          <div class="ps-row">
+            <div>
+              <div class="ps-label">Calidad</div>
+              <div class="ps-sub">Selecciona la calidad disponible</div>
+            </div>
+            <div id="qualityCurrent" class="ps-value">Auto</div>
+          </div>
+          <select id="qualitySelect" class="ps-select" aria-label="Calidad">
+            <option value="auto">Auto</option>
+          </select>
+          <div class="ps-row" style="margin-top:10px">
+            <div>
+              <div class="ps-label">Ajustar a pantalla</div>
+              <div class="ps-sub">Llena mejor la pantalla en fullscreen</div>
+            </div>
+            <button id="fitScreenToggle" class="ps-toggle" type="button" aria-pressed="false">Off</button>
+          </div>
+        </div>
+
+
+<div id="playerStartCover" class="player-start-cover" aria-hidden="true">
+  <div class="player-start-card">
+    <div class="player-start-spinner"></div>
+    <div class="player-start-title" id="playerStartTitle">Cargando clase...</div>
+    <div class="player-start-text">Espera un momento</div>
+  </div>
+</div>
+
+<div class="player-brand-top" id="playerBrandTop">
+  <div class="player-brand-course" id="playerBrandCourse">Curso</div>
+</div>
+
+<div class="player-brand-bottom" id="playerBrandBottom">
+  <div class="player-brand-module" id="playerBrandModule">Cargando módulo...</div>
+</div>
+
+<div id="playerPoster" class="player-poster is-loading" aria-hidden="true">
+  <img id="playerPosterImg" src="icons/icon-512.png" alt="">
+  <div class="player-loading-card" id="playerLoadingCard">
+    <div class="player-spinner"></div>
+    <div>Cargando clase...</div>
+  </div>
+  <button id="playerReplayBtn" class="player-replay" type="button">↻ Volver a ver</button>
+</div>
+
+<div id="tapShield" class="tap-shield" aria-label="Zona protegida del video"></div>
+
+        </div>
+              </div>
+      <div class="player-meta">
+        <div class="left">
+          <div class="now" id="nowTitle">Selecciona una clase</div>
+          
+        </div>
+        <div class="right">
+
+<div class="cc-wrap" id="ccWrap" aria-label="Controles del video">
+  <button class="cc-btn cc-skip" id="ccBack10" type="button" aria-label="Retroceder 10 segundos">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path class="skip-arrow" d="M13 5.2A7.8 7.8 0 1 1 5.1 13"/>
+      <path class="skip-arrow" d="M13 5.2v4M13 5.2h3.8"/>
+      <text class="skip-num" x="12" y="16.2" text-anchor="middle">10</text>
+    </svg>
+  </button>
+  <button class="cc-btn" id="ccPlay" type="button" aria-label="Reproducir / Pausar">▶</button>
+  <input class="cc-seek" id="ccSeek" type="range" min="0" max="1000" value="0" aria-label="Línea de tiempo">
+  <span class="cc-time" id="ccTime">0:00 / 0:00</span>
+  <button class="cc-btn cc-speed" id="ccSpeedBtn" type="button" aria-label="Velocidad">1x</button>
+  <button class="cc-btn cc-skip" id="ccFwd10" type="button" aria-label="Adelantar 10 segundos">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path class="skip-arrow" d="M11 5.2A7.8 7.8 0 1 0 18.9 13"/>
+      <path class="skip-arrow" d="M11 5.2v4M11 5.2H7.2"/>
+      <text class="skip-num" x="12" y="16.2" text-anchor="middle">10</text>
+    </svg>
+  </button>
+  <button class="cc-btn" id="ccFs" type="button" aria-label="Pantalla completa">⛶</button>
+</div>
+
+
+          <!-- Link externo oculto para mantener el reproductor limpio -->
+          <a class="smallbtn" id="openYT" href="#" target="_blank" rel="noopener" style="display:none">Ver en YouTube</a>
+        </div>
+    </section>
+
+    <section class="curriculum" aria-label="Módulos">
+      <div class="curriculum-h">
+        <div>
+          <h2>Módulos</h2>
+          <div class="sub">Tu contenido está organizado para avanzar clase por clase</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div class="sub" id="countMods"></div><div id="courseProgressBadge">0%</div></div>
+      </div>
+
+      <div id="modules"></div>
+      <div id="msg" class="err"></div>
+    </section>
+  </div>
+
+  
+<script>
+/* ===== YouTube IFrame Player API (sin UI de YouTube) + controles propios ===== */
+let YTPlayer = null;
+let YTReady = false;
+let pendingVideoId = null;
+let videoLoadedFlag = false;
+const playerPosterEl = document.getElementById("playerPoster");
+const playerPosterImgEl = document.getElementById("playerPosterImg");
+const playerReplayBtn = document.getElementById("playerReplayBtn");
+let currentVideoId = "";
+let currentModuleTitle = "";
+
+const playerStartCover = document.getElementById("playerStartCover");
+const playerStartTitle = document.getElementById("playerStartTitle");
+
+function showPlayerStartCover(title){
+  if (playerStartTitle) playerStartTitle.textContent = title || "Cargando clase...";
+  if (playerStartCover) playerStartCover.classList.remove("hide");
+}
+
+function hidePlayerStartCover(){
+  if (playerStartCover) playerStartCover.classList.add("hide");
+}
+
+
+const playerBrandCourseEl = document.getElementById("playerBrandCourse");
+const playerBrandModuleEl = document.getElementById("playerBrandModule");
+let brandBarsTimer = null;
+let showBrandBarsOnceForModule = false;
+
+function updateBrandBars(courseTitle, moduleTitle){
+  if (playerBrandCourseEl) playerBrandCourseEl.textContent = courseTitle || "Curso";
+  if (playerBrandModuleEl) playerBrandModuleEl.textContent = moduleTitle || "Cargando módulo...";
+}
+
+function showBrandBars(){
+  const playerBox = document.querySelector(".player");
+  if (playerBox) playerBox.classList.add("show-brand-bars");
+  window.clearTimeout(brandBarsTimer);
+}
+
+function hideBrandBars(delay){
+  const playerBox = document.querySelector(".player");
+  window.clearTimeout(brandBarsTimer);
+  brandBarsTimer = window.setTimeout(() => {
+    if (playerBox) playerBox.classList.remove("show-brand-bars");
+  }, typeof delay === "number" ? delay : 3000);
+}
+
+
+function setPlayerLoading(videoId, title){
+  currentVideoId = normalizeVideoId_(videoId);
+  currentModuleTitle = title || "";
+  updateBrandBars(document.getElementById("courseTitle")?.textContent || "Curso", currentModuleTitle || "Cargando módulo...");
+  showBrandBarsOnceForModule = true;
+  showBrandBars();
+  const poster = currentVideoId ? `https://i.ytimg.com/vi/${currentVideoId}/hqdefault.jpg` : "icons/icon-512.png";
+  if (playerPosterImgEl) playerPosterImgEl.src = poster;
+  if (playerPosterEl) playerPosterEl.classList.remove("is-ended");
+  const playerBox = document.querySelector(".player");
+  if (playerBox) playerBox.classList.add("is-loading");
+}
+
+function hidePlayerPoster(){
+  const playerBox = document.querySelector(".player");
+  if (playerBox) playerBox.classList.remove("is-loading");
+  if (playerPosterEl) playerPosterEl.classList.remove("is-ended");
+}
+
+function showEndedPoster(){
+  const playerBox = document.querySelector(".player");
+  if (playerBox) playerBox.classList.add("is-loading");
+  if (playerPosterEl) playerPosterEl.classList.add("is-ended");
+}
+
+if (playerReplayBtn){
+  playerReplayBtn.addEventListener("click", () => {
+    if (!currentVideoId) return;
+    setPlayerLoading(currentVideoId, currentModuleTitle);
+    showBrandBarsOnceForModule = true;
+    showBrandBars();
+    loadVideoById_(currentVideoId, true);
+  });
+}
+
+
+function fmtTime_(sec){
+  sec = Math.max(0, Math.floor(sec || 0));
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return m + ":" + String(s).padStart(2, "0");
+}
+
+function normalizeVideoId_(value){
+  if (!value) return "";
+  const v = String(value).trim();
+  if (/^[a-zA-Z0-9_-]{11}$/.test(v)) return v;
+  const m = v.match(/(?:youtu\.be\/|v=|\/embed\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : "";
+}
+
+function ensureYT_(){
+  if (document.getElementById("ytApiLoaded")) return;
+  const s = document.createElement("script");
+  s.id = "ytApiLoaded";
+  s.src = "https://www.youtube.com/iframe_api";
+  s.async = true;
+  document.head.appendChild(s);
+}
+
+function loadVideoById_(videoId, autoplay){
+  const vid = normalizeVideoId_(videoId);
+  if (!vid) return;
+  if (YTReady && YTPlayer && typeof YTPlayer.loadVideoById === "function"){
+    YTPlayer.loadVideoById({ videoId: vid, startSeconds: 0 });
+    if (autoplay) YTPlayer.playVideo();
+  } else {
+    pendingVideoId = vid;
+  }
+}
+
+function setupControls_(){
+  const btn = document.getElementById("ccPlay");
+  const back10 = document.getElementById("ccBack10");
+  const fwd10 = document.getElementById("ccFwd10");
+  const seek = document.getElementById("ccSeek");
+  const time = document.getElementById("ccTime");
+  const fs = document.getElementById("ccFs");
+  const wrap = document.querySelector(".player-wrap");
+  let seeking = false;
+
+
+  const speedBtn = document.getElementById("ccSpeedBtn");
+  const speedRates = [0.5, 0.75, 1, 1.25, 1.5, 2];
+  let speedIdx = 2; // 1x
+
+  function applySpeed_(){
+    if (!YTPlayer) return;
+    const r = speedRates[speedIdx] || 1;
+    try{ YTPlayer.setPlaybackRate(r); }catch(e){}
+    if (speedBtn) speedBtn.textContent = (r % 1 === 0 ? String(r).replace('.0','') : String(r)) + "x";
+  }
+
+  if (speedBtn){
+    speedBtn.addEventListener("click", () => {
+      speedIdx = (speedIdx + 1) % speedRates.length;
+      applySpeed_();
+    });
+  }
+
+
+  const settingsBtn = document.getElementById("playerSettingsBtn");
+  const settingsPanel = document.getElementById("playerSettingsPanel");
+  const qualitySelect = document.getElementById("qualitySelect");
+  const qualityCurrent = document.getElementById("qualityCurrent");
+  const fitScreenToggle = document.getElementById("fitScreenToggle");
+  let fitScreenMode = false;
+
+  function computeFitScreenScale(){
+    const vw = window.innerWidth || document.documentElement.clientWidth || 1;
+    const vh = window.innerHeight || document.documentElement.clientHeight || 1;
+    const videoRatio = 16 / 9;
+    const screenRatio = vw / vh;
+    if (screenRatio > videoRatio) return Math.max(1, Math.min(1.8, screenRatio / videoRatio));
+    return Math.max(1, Math.min(1.8, videoRatio / screenRatio));
+  }
+
+  function applyFitScreenMode(){
+    if (!wrap) return;
+    wrap.style.setProperty('--fit-screen-scale', String(computeFitScreenScale()));
+    if (fitScreenMode) wrap.classList.add('fit-screen-mode');
+    else wrap.classList.remove('fit-screen-mode');
+    if (fitScreenToggle){
+      fitScreenToggle.textContent = fitScreenMode ? 'On' : 'Off';
+      fitScreenToggle.setAttribute('aria-pressed', fitScreenMode ? 'true' : 'false');
+    }
+  }
+
+  function hydrateQualityOptions(){
+    if (!YTPlayer || !qualitySelect) return;
+    let levels = [];
+    try{ levels = YTPlayer.getAvailableQualityLevels ? (YTPlayer.getAvailableQualityLevels() || []) : []; }catch(e){}
+    const labels = {
+      highres:'1080p+',
+      hd2160:'2160p',
+      hd1440:'1440p',
+      hd1080:'1080p',
+      hd720:'720p',
+      large:'480p',
+      medium:'360p',
+      small:'240p',
+      tiny:'144p',
+      auto:'Auto',
+      default:'Auto'
+    };
+    const current = (YTPlayer.getPlaybackQuality && YTPlayer.getPlaybackQuality()) || 'auto';
+    qualitySelect.innerHTML = '<option value="auto">Auto</option>';
+    levels.forEach(function(level){
+      const opt = document.createElement('option');
+      opt.value = level;
+      opt.textContent = labels[level] || level;
+      qualitySelect.appendChild(opt);
+    });
+    try{
+      qualitySelect.value = current;
+    }catch(e){
+      qualitySelect.value = 'auto';
+    }
+    if (qualityCurrent) qualityCurrent.textContent = labels[current] || current || 'Auto';
+  }
+
+  if (qualitySelect){
+    qualitySelect.addEventListener('change', function(){
+      const value = qualitySelect.value || 'auto';
+      try{
+        if (value === 'auto' && YTPlayer && YTPlayer.setPlaybackQualityRange){
+          YTPlayer.setPlaybackQualityRange('default');
+        }
+        if (YTPlayer && YTPlayer.setPlaybackQuality){
+          YTPlayer.setPlaybackQuality(value === 'auto' ? 'default' : value);
+        }
+      }catch(e){}
+      const labels = {
+        highres:'1080p+',
+        hd2160:'2160p',
+        hd1440:'1440p',
+        hd1080:'1080p',
+        hd720:'720p',
+        large:'480p',
+        medium:'360p',
+        small:'240p',
+        tiny:'144p',
+        auto:'Auto',
+        default:'Auto'
+      };
+      if (qualityCurrent) qualityCurrent.textContent = labels[value] || value;
+    });
+  }
+
+  if (settingsBtn && settingsPanel){
+    settingsBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      settingsPanel.classList.toggle('open');
+      if (settingsPanel.classList.contains('open')) hydrateQualityOptions();
+      if (window.__showCustomControls) window.__showCustomControls();
+    });
+    document.addEventListener('click', function(e){
+      if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)){
+        settingsPanel.classList.remove('open');
+      }
+    });
+  }
+
+  if (fitScreenToggle){
+    fitScreenToggle.addEventListener('click', function(){
+      fitScreenMode = !fitScreenMode;
+      applyFitScreenMode();
+    });
+  }
+
+  window.addEventListener('resize', applyFitScreenMode);
+
+  const rotateBtn = document.getElementById("playerRotateBtn");
+
+  function syncFloatingButtons(){
+    const controlsVisible = !!(wrap && wrap.classList.contains('is-visible'));
+    const isFs = !!(document.fullscreenElement === document.querySelector('.player-wrap') || document.webkitFullscreenElement === document.querySelector('.player-wrap'));
+    if (settingsBtn){
+      settingsBtn.classList.toggle('is-visible', controlsVisible);
+    }
+    if (rotateBtn){
+      const smallScreen = (window.innerWidth <= 1024);
+      rotateBtn.classList.toggle('is-visible', controlsVisible && isFs && smallScreen);
+    }
+  }
+
+  async function tryScreenOrientation(){
+    try{
+      if (screen.orientation && screen.orientation.lock){
+        const currentLandscape = window.matchMedia('(orientation: landscape)').matches;
+        await screen.orientation.lock(currentLandscape ? 'portrait' : 'landscape');
+        return true;
+      }
+    }catch(e){}
+    return false;
+  }
+
+  if (rotateBtn){
+    rotateBtn.addEventListener('click', async function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      const ok = await tryScreenOrientation();
+      if (!ok){
+        const currentLandscape = window.matchMedia('(orientation: landscape)').matches;
+        alert(currentLandscape ? 'Gira tu dispositivo a vertical.' : 'Gira tu dispositivo a horizontal.');
+      }
+      if (window.__showCustomControls) window.__showCustomControls();
+    });
+  }
+
+  document.addEventListener('fullscreenchange', syncFloatingButtons);
+  document.addEventListener('webkitfullscreenchange', syncFloatingButtons);
+  window.addEventListener('resize', syncFloatingButtons);
+  window.syncFloatingButtons = syncFloatingButtons;
+
+  document.addEventListener('fullscreenchange', applyFitScreenMode);
+  document.addEventListener('webkitfullscreenchange', applyFitScreenMode);
+
+
+  if (btn){
+    btn.addEventListener("click", () => {
+      if (!YTPlayer) return;
+      const st = YTPlayer.getPlayerState();
+      if (st === 1) YTPlayer.pauseVideo();
+      else YTPlayer.playVideo();
+    });
+  }
+
+  function jumpBy_(delta){
+    if (!YTPlayer || typeof YTPlayer.getCurrentTime !== "function") return;
+    const cur = YTPlayer.getCurrentTime() || 0;
+    const dur = (YTPlayer.getDuration && YTPlayer.getDuration()) || 0;
+    let next = cur + delta;
+    if (dur > 0) next = Math.min(Math.max(0, next), dur);
+    else next = Math.max(0, next);
+    try{ YTPlayer.seekTo(next, true); }catch(e){}
+    if (window.__showCustomControls) window.__showCustomControls();
+  }
+
+  if (back10){
+    back10.addEventListener("click", () => jumpBy_(-10));
+  }
+  if (fwd10){
+    fwd10.addEventListener("click", () => jumpBy_(10));
+  }
+
+
+  if (seek){
+    seek.addEventListener("input", () => { seeking = true; });
+    seek.addEventListener("change", () => {
+      if (!YTPlayer) return;
+      const dur = YTPlayer.getDuration ? YTPlayer.getDuration() : 0;
+      const v = Number(seek.value || 0) / 1000;
+      if (dur > 0) YTPlayer.seekTo(dur * v, true);
+      seeking = false;
+    });
+  }
+
+  // Fullscreen propio (funciona en móvil, depende del navegador)
+  async function toggleFs(){
+    if (!wrap) return;
+    try{
+      const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+      if (isFs){
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+      } else {
+        if (wrap.requestFullscreen) await wrap.requestFullscreen();
+        else if (wrap.webkitRequestFullscreen) await wrap.webkitRequestFullscreen();
+      }
+    }catch(e){}
+  }
+  if (fs) fs.addEventListener("click", toggleFs);
+
+  // Actualiza UI
+  setInterval(() => {
+    if (!YTPlayer) return;
+    if (seek && !seeking){
+      const dur = YTPlayer.getDuration ? YTPlayer.getDuration() : 0;
+      const cur = YTPlayer.getCurrentTime ? YTPlayer.getCurrentTime() : 0;
+      if (dur > 0){
+        seek.value = String(Math.round((cur / dur) * 1000));
+        if (time) time.textContent = fmtTime_(cur) + " / " + fmtTime_(dur);
+        if (currentModuleIndex >= 0) setCurrentTimeForModule(currentModuleIndex, cur);
+      }
+    }
+  }, 1000);
+}
+
+// YouTube API callback
+window.onYouTubeIframeAPIReady = function(){
+  YTReady = true;
+
+  YTPlayer = new YT.Player("player", {
+    host: "https://www.youtube-nocookie.com",
+    width: "100%",
+    height: "100%",
+    playerVars: {
+      controls: 0,          // sin botones de YouTube (no share, no YouTube button)
+      rel: 0,
+      modestbranding: 1,
+      iv_load_policy: 3,
+      playsinline: 1,
+      disablekb: 1,
+      fs: 0,
+      origin: location.origin
+    },
+    events: {
+      onReady: () => {
+        setupControls_();
+        try{
+          const qSelect = document.getElementById("qualitySelect");
+          if (qSelect) {
+            let levels = YTPlayer.getAvailableQualityLevels ? (YTPlayer.getAvailableQualityLevels() || []) : [];
+            const labels = {highres:'1080p+',hd2160:'2160p',hd1440:'1440p',hd1080:'1080p',hd720:'720p',large:'480p',medium:'360p',small:'240p',tiny:'144p',auto:'Auto',default:'Auto'};
+            qSelect.innerHTML = '<option value="auto">Auto</option>';
+            levels.forEach(function(level){
+              const opt = document.createElement('option');
+              opt.value = level;
+              opt.textContent = labels[level] || level;
+              qSelect.appendChild(opt);
+            });
+          }
+        }catch(e){}
+        if (pendingVideoId){
+          loadVideoById_(pendingVideoId, false);
+          pendingVideoId = null;
+        }
+      },
+      onStateChange: (e) => {
+        const btn = document.getElementById("ccPlay");
+        if (btn) {
+          if (e.data === 1) btn.textContent = "⏸";
+          else btn.textContent = "▶";
+        }
+
+        if (e.data === 1 && currentModuleIndex >= 0) {
+          hidePlayerPoster();
+          hidePlayerStartCover();
+          if (showBrandBarsOnceForModule) {
+            hideBrandBars(3000);
+            showBrandBarsOnceForModule = false;
+          }
+          renderProgressUI();
+          if (resumePending) {
+            const resume = getResumeTime(currentModuleIndex);
+            if (resume > 2) {
+              try { YTPlayer.seekTo(resume, true); } catch(err){}
+            }
+            resumePending = false;
+          }
+        }
+
+        if (e.data === 3 || e.data === -1 || e.data === 5) {
+          const playerBox = document.querySelector(".player");
+          if (playerBox && !playerBox.classList.contains("is-loading")) {
+            playerBox.classList.add("is-loading");
+            if (playerPosterEl) playerPosterEl.classList.remove("is-ended");
+          }
+        }
+
+        if (e.data === 2) {
+          hidePlayerPoster();
+          hidePlayerStartCover();
+        }
+
+        if (e.data === 0 && currentModuleIndex >= 0) {
+          markModuleCompleted(currentModuleIndex);
+          const nextIndex = currentModuleIndex + 1;
+          if (nextIndex < courseModules.length) {
+            setTimeout(() => openModuleByIndex(nextIndex, false), 700);
+          } else {
+            try { YTPlayer.stopVideo(); } catch(err){}
+            showEndedPoster();
+          }
+        }
+      }
+    }
+  });
+};
+
+ensureYT_();
+</script>
+
+<script>
+
+function cleanEmbedUrl_(url){
+  const u = String(url||"").trim();
+  if(!u) return "";
+  // Cambia a youtube-nocookie cuando sea embed de YouTube
+  let out = u.replace("https://www.youtube.com/embed/","https://www.youtube-nocookie.com/embed/")
+             .replace("http://www.youtube.com/embed/","https://www.youtube-nocookie.com/embed/")
+             .replace("https://youtu.be/","https://www.youtube-nocookie.com/embed/");
+  // Asegura parámetros para reducir elementos de YouTube (no se puede ocultar 100% por políticas de YouTube)
+  const hasQuery = out.includes("?");
+  const params = new URLSearchParams(hasQuery ? out.split("?")[1] : "");
+  if(!params.has("rel")) params.set("rel","0");
+  if(!params.has("modestbranding")) params.set("modestbranding","1");
+  if(!params.has("iv_load_policy")) params.set("iv_load_policy","3");
+  if(!params.has("playsinline")) params.set("playsinline","1");
+  if(!params.has("controls")) params.set("controls","1");
+  if(!params.has("fs")) params.set("fs","1");         // fullscreen on
+  if(!params.has("disablekb")) params.set("disablekb","0");
+  out = out.split("?")[0] + "?" + params.toString();
+  return out;
+}
+
+function escapeHtml_(s){
+  return String(s||"").replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
+  const API_URL = "https://pasir-proxy.vercel.app/api";
+
+  function jsonp(action, payload) {
+    return new Promise((resolve, reject) => {
+      const cb = "cb_" + Math.random().toString(36).slice(2);
+      const params = new URLSearchParams();
+      params.set("action", action);
+      Object.entries(payload || {}).forEach(([k,v]) => {
+        if (v === undefined || v === null) return;
+        params.set(k, String(v));
+      });
+      params.set("callback", cb);
+
+      const script = document.createElement("script");
+      script.src = API_URL + "?" + params.toString();
+      script.async = true;
+
+      window[cb] = (data) => {
+        cleanup();
+        resolve(data);
+      };
+
+      function cleanup() {
+        try { delete window[cb]; } catch(e) { window[cb] = undefined; }
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      script.onerror = () => {
+        cleanup();
+        reject(new Error("No se pudo conectar (JSONP)."));
+      };
+
+      document.body.appendChild(script);
+    });
+  }
+
+  const token = localStorage.getItem("pasir_token");
+  if (!token) location.replace("login.html");
+
+  const params = new URLSearchParams(location.search);
+  const courseId = params.get("courseId");
+  const courseProgressKey = () => "pasir_progress_" + (courseId || "curso");
+  let courseModules = [];
+  let currentModuleIndex = -1;
+  let resumePending = false;
+
+  function loadCourseProgress(){
+    try { return JSON.parse(localStorage.getItem(courseProgressKey()) || "{}"); }
+    catch(e){ return {}; }
+  }
+
+  function saveCourseProgress(data){
+    localStorage.setItem(courseProgressKey(), JSON.stringify(data || {}));
+  }
+  function ensureTotalModulesSaved(total){
+    const p = loadCourseProgress();
+    p.totalModules = Number(total || 0);
+    saveCourseProgress(p);
+  }
+
+
+  function markModuleCompleted(idx){
+    const p = loadCourseProgress();
+    if (!Array.isArray(p.completed)) p.completed = [];
+    if (!p.completed.includes(idx)) p.completed.push(idx);
+    p.lastIndex = idx;
+    p.updatedAt = Date.now();
+    saveCourseProgress(p);
+    renderProgressUI();
+  }
+
+  function setLastModule(idx){
+    const p = loadCourseProgress();
+    p.lastIndex = idx;
+    p.updatedAt = Date.now();
+    saveCourseProgress(p);
+    renderProgressUI();
+  }
+
+  function setCurrentTimeForModule(idx, seconds){
+    const p = loadCourseProgress();
+    p.lastIndex = idx;
+    p.lastTime = Math.max(0, Math.floor(seconds || 0));
+    p.updatedAt = Date.now();
+    saveCourseProgress(p);
+  }
+
+  function getResumeTime(idx){
+    const p = loadCourseProgress();
+    if (p.lastIndex === idx) return Math.max(0, Math.floor(p.lastTime || 0));
+    return 0;
+  }
+
+  function completedPercent(){
+    const p = loadCourseProgress();
+    const total = courseModules.length || 0;
+    const done = Array.isArray(p.completed) ? p.completed.length : 0;
+    return total ? Math.round((done / total) * 100) : 0;
+  }
+
+  function renderProgressUI(){
+    const p = loadCourseProgress();
+    const completed = Array.isArray(p.completed) ? p.completed : [];
+    const badge = document.getElementById("courseProgressBadge");
+    if (badge) badge.textContent = completedPercent() + "%";
+
+    document.querySelectorAll("#modules .mod").forEach((btn, idx) => {
+      btn.classList.remove("done","current");
+      const s = btn.querySelector(".s");
+      if (completed.includes(idx)) {
+        btn.classList.add("done");
+        if (s) {
+          s.textContent = "Completada";
+          s.classList.add("completed-text");
+        }
+      } else {
+        if (s) {
+          s.textContent = "Toca para reproducir";
+          s.classList.remove("completed-text");
+        }
+      }
+      if (idx === currentModuleIndex) {
+        btn.classList.add("current");
+        if (s && !completed.includes(idx)) s.textContent = "En reproducción";
+      }
+    });
+  }
+
+  function openModuleByIndex(idx, shouldResume){
+    const btn = document.querySelectorAll("#modules .mod")[idx];
+    if (!btn) return;
+    resumePending = !!shouldResume;
+    btn.click();
+  }
+
+
+  document.getElementById("logout").onclick = () => {
+    localStorage.removeItem("pasir_token");
+    location.replace("index.html");
+  };
+
+  function setActive(btn) {
+    document.querySelectorAll(".mod").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  }
+
+  function showError(text) {
+    document.getElementById("msg").textContent = text || "";
+  }
+
+  (async () => {
+    if (!courseId) {
+      showError("Falta courseId en la URL. Ej: course.html?courseId=logo8-basico");
+      return;
+    }
+
+    const r = await jsonp("course", { token, courseId });
+    if (!r.ok) {
+      showError(r.error || "No se pudo cargar el curso.");
+      if ((r.error || "").toLowerCase().includes("no autorizado")) {
+        setTimeout(()=> location.replace("account.html"), 800);
+      }
+      return;
+    }
+
+    document.getElementById("courseTitle").textContent = r.course.title || courseId;
+    updateBrandBars(r.course.title || courseId, currentModuleTitle || "Cargando módulo...");
+    showPlayerStartCover("Cargando clase...");
+
+    const box = document.getElementById("modules");
+    box.innerHTML = "";
+    showError("");
+
+        courseModules = Array.isArray(r.modules) ? r.modules : [];
+    ensureTotalModulesSaved(courseModules.length);
+    document.getElementById("countMods").textContent = (courseModules.length||0) + " clases";
+    courseModules.forEach((m, idx) => {
+      const b = document.createElement("button");
+      b.className = "mod";
+      b.dataset.index = idx;
+      const videoId = (m.videoId) || (m.embedUrl || "").split("/embed/")[1]?.split("?")[0] || "";
+      const thumb = videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : "icons/icon-192.png";
+      b.innerHTML = `
+        <div class="thumb"><img src="${thumb}" alt=""></div>
+        <div class="info">
+          <p class="t">${escapeHtml_(`${m.order}. ${m.title}`)}</p>
+          <p class="s">Toca para reproducir</p>
+        </div>
+      `;
+      b.onclick = () => {
+        currentModuleIndex = idx;
+        setActive(b);
+        setLastModule(idx);
+        videoLoadedFlag = true;
+        showPlayerStartCover(m.title);
+        setPlayerLoading(videoId, m.title);
+        loadVideoById_(videoId, false);
+        document.getElementById("nowPlaying").textContent = "Reproduciendo: " + m.title;
+        const nt = document.getElementById("nowTitle"); if (nt) nt.textContent = m.title;
+        const yt = document.getElementById("openYT");
+        if (yt) yt.removeAttribute("href");
+        renderProgressUI();
+      };
+      box.appendChild(b);
+    });
+
+    renderProgressUI();
+    const saved = loadCourseProgress();
+    const startIndex = (typeof saved.lastIndex === "number" && saved.lastIndex >= 0 && saved.lastIndex < courseModules.length) ? saved.lastIndex : 0;
+    if (courseModules.length > 0) openModuleByIndex(startIndex, true);
+  })().catch(err => {
+    showError(err.message || String(err));
+  });
+</script>
+
+  <script>
+  // PWA: registrar Service Worker
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    });
+  }
+</script>
+
+<script>
+(function(){
+  const token = localStorage.getItem("pasir_token");
+  const userMenu = document.getElementById("userMenu");
+  const userTrigger = document.getElementById("userTrigger");
+  const userDropdown = document.getElementById("userDropdown");
+  const userNameEl = document.getElementById("userName");
+
+  // Toggle dropdown
+  function closeMenu(){
+    if (!userDropdown) return;
+    userDropdown.classList.remove("open");
+    if (userTrigger) userTrigger.setAttribute("aria-expanded","false");
+  }
+  function openMenu(){
+    if (!userDropdown) return;
+    userDropdown.classList.add("open");
+    if (userTrigger) userTrigger.setAttribute("aria-expanded","true");
+  }
+  if (userTrigger && userDropdown){
+    userTrigger.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      userDropdown.classList.contains("open") ? closeMenu() : openMenu();
+    });
+    document.addEventListener("click", ()=> closeMenu());
+    document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeMenu(); });
+    userDropdown.addEventListener("click", (e)=> e.stopPropagation());
+  }
+
+  // Fill name (uses jsonp() already defined in this page)
+  if (token && userMenu) userMenu.style.display = "inline-block";
+
+  async function hydrateUser(){
+    const storedName = localStorage.getItem("pasir_email");
+    if (storedName && userNameEl) userNameEl.textContent = storedName;
+    if (!token) return;
+    try{
+      const r = await jsonp("me", { token });
+      if (!r.ok) return;
+      const email = (r.user && (r.user.email || r.user.correo)) || r.email || localStorage.getItem("pasir_email") || "—";
+      const label = email;
+
+      if (userNameEl) userNameEl.textContent = label;
+      localStorage.setItem("pasir_email", label);
+      if (userMenu) userMenu.style.display = "inline-block";
+    }catch(e){}
+  }
+  hydrateUser();
+
+  // Logout (keep behavior: clear token and go to index)
+  const logoutBtn = document.getElementById("logout");
+  if (logoutBtn){
+    logoutBtn.addEventListener("click", (e)=>{
+      e.preventDefault();
+      localStorage.removeItem("pasir_token");
+      localStorage.removeItem("pasir_email");
+      localStorage.removeItem("pasir_name");
+      location.replace("index.html");
+    });
+  }
+})();
+</script>
+
+
+<script>
+/* ==== Mostrar controles propios al tocar el video (y bloquear toques al player nativo) ==== */
+(function(){
+  const shield = document.getElementById("tapShield");
+  const wrap = document.getElementById("ccWrap");
+  let hideTimer = null;
+
+  function showControls(){
+    if (!wrap || !videoLoadedFlag) return;
+    wrap.classList.add("is-visible");
+    if (window.syncFloatingButtons) window.syncFloatingButtons();
+    if (hideTimer) clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      wrap.classList.remove("is-visible");
+      if (window.syncFloatingButtons) window.syncFloatingButtons();
+      const panel = document.getElementById("playerSettingsPanel");
+      if (panel) panel.classList.remove("open");
+    }, 3200);
+  }
+
+  // Tocar el video: solo muestra controles, NO deja interactuar con el iframe
+  if (shield){
+    shield.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      showControls();
+    }, {passive:false});
+
+    shield.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      showControls();
+    }, {passive:false});
+  }
+
+  // Si tocan el área de controles, no ocultar inmediatamente
+  if (wrap){
+    wrap.addEventListener("pointerdown", () => {
+      if (hideTimer) clearTimeout(hideTimer);
+      if (window.syncFloatingButtons) window.syncFloatingButtons();
+    });
+    wrap.addEventListener("pointerup", () => {
+      showControls();
+    });
+  }
+
+  // Exponer para otros scripts si hace falta
+  window.__showCustomControls = showControls;
+})();
+</script>
+
+
+</div></main>
+
+
+
+<script id="player-pinch-zoom">
+(function(){
+  const wrap = document.querySelector('.player-wrap');
+  const surface = document.getElementById('playerZoomSurface');
+  const shield = document.getElementById('tapShield');
+  if(!wrap || !surface || !shield) return;
+
+  let scale = 1;
+  let panX = 0;
+  let panY = 0;
+
+  let pinchStartDist = 0;
+  let pinchStartScale = 1;
+  let pinchAnchor = {x:0, y:0};
+
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragOriginX = 0;
+  let dragOriginY = 0;
+  let dragging = false;
+
+  function isFullscreen(){
+    return document.fullscreenElement === wrap || document.webkitFullscreenElement === wrap;
+  }
+
+  function isTouchDevice(){
+    return ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  }
+
+  function clamp(val, min, max){
+    return Math.min(Math.max(val, min), max);
+  }
+
+  function getBounds(nextScale){
+    const rect = wrap.getBoundingClientRect();
+    return {
+      maxX: Math.max(0, ((rect.width * nextScale) - rect.width) / 2),
+      maxY: Math.max(0, ((rect.height * nextScale) - rect.height) / 2)
+    };
+  }
+
+  function applyTransform(){
+    const bounds = getBounds(scale);
+    panX = clamp(panX, -bounds.maxX, bounds.maxX);
+    panY = clamp(panY, -bounds.maxY, bounds.maxY);
+
+    if(scale <= 1.001){
+      scale = 1;
+      panX = 0;
+      panY = 0;
+      surface.style.transform = 'translate3d(0,0,0) scale(1)';
+      return;
+    }
+
+    surface.style.transform = 'translate3d(' + panX + 'px,' + panY + 'px,0) scale(' + scale + ')';
+  }
+
+  function resetZoom(){
+    scale = 1;
+    panX = 0;
+    panY = 0;
+    dragging = false;
+    applyTransform();
+  }
+
+  function dist(t1, t2){
+    const dx = t2.clientX - t1.clientX;
+    const dy = t2.clientY - t1.clientY;
+    return Math.hypot(dx, dy);
+  }
+
+  function midpoint(t1, t2){
+    return {
+      x: (t1.clientX + t2.clientX) / 2,
+      y: (t1.clientY + t2.clientY) / 2
+    };
+  }
+
+  function startDrag(touch){
+    dragging = true;
+    dragStartX = touch.clientX;
+    dragStartY = touch.clientY;
+    dragOriginX = panX;
+    dragOriginY = panY;
+  }
+
+  shield.addEventListener('touchstart', function(e){
+    if(!isFullscreen() || !isTouchDevice()) return;
+
+    if(e.touches.length === 2){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const a = e.touches[0];
+      const b = e.touches[1];
+      pinchStartDist = dist(a, b);
+      pinchStartScale = scale;
+      pinchAnchor = midpoint(a, b);
+      dragging = false;
+      return;
+    }
+
+    if(e.touches.length === 1 && scale > 1.001){
+      e.preventDefault();
+      e.stopPropagation();
+      startDrag(e.touches[0]);
+    }
+  }, {passive:false});
+
+  shield.addEventListener('touchmove', function(e){
+    if(!isFullscreen() || !isTouchDevice()) return;
+
+    if(e.touches.length === 2){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const a = e.touches[0];
+      const b = e.touches[1];
+      const currentDist = dist(a, b);
+      let nextScale = pinchStartDist ? (pinchStartScale * (currentDist / pinchStartDist)) : pinchStartScale;
+      nextScale = clamp(nextScale, 1, 4);
+
+      const newMid = midpoint(a, b);
+      const dx = newMid.x - pinchAnchor.x;
+      const dy = newMid.y - pinchAnchor.y;
+
+      scale = nextScale;
+      panX += dx;
+      panY += dy;
+      pinchAnchor = newMid;
+
+      if(scale <= 1.02){
+        resetZoom();
+      } else {
+        applyTransform();
+      }
+      return;
+    }
+
+    if(e.touches.length === 1 && scale > 1.001 && dragging){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const t = e.touches[0];
+      panX = dragOriginX + (t.clientX - dragStartX);
+      panY = dragOriginY + (t.clientY - dragStartY);
+      applyTransform();
+    }
+  }, {passive:false});
+
+  shield.addEventListener('touchend', function(e){
+    if(!isFullscreen() || !isTouchDevice()) return;
+
+    if(e.touches.length === 1 && scale > 1.001){
+      // Si quedó un dedo después del pinch, habilitar arrastre con ese dedo
+      startDrag(e.touches[0]);
+      return;
+    }
+
+    if(e.touches.length === 0){
+      dragging = false;
+      if(scale <= 1.02){
+        resetZoom();
+      } else {
+        applyTransform();
+      }
+    }
+  }, {passive:false});
+
+  shield.addEventListener('touchcancel', function(){
+    dragging = false;
+    if(scale <= 1.02) resetZoom();
+    else applyTransform();
+  }, {passive:false});
+
+  document.addEventListener('fullscreenchange', function(){
+    if(!isFullscreen()) resetZoom();
+  });
+
+  document.addEventListener('webkitfullscreenchange', function(){
+    if(!isFullscreen()) resetZoom();
+  });
+})();
+</script>
+
+
+
+</body>
+</html>
