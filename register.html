@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Crear cuenta | Pasir Academy</title>
+<meta name="theme-color" id="theme-color-meta" content="#f2f7ff"/>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="app.css">
+<script src="theme.js" defer></script>
+<style>
+:root{
+  --bg:#f3f5f9;
+  --stroke:#d8dee8;
+  --text:#0f172a;
+  --muted:#64748b;
+  --blue:#38bdf8;
+}
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+.app-header{background:transparent!important;border-bottom:none!important;position:relative!important}
+.app-header .container{width:min(1100px,92vw);margin:0 auto}
+.app-header .row{display:flex;justify-content:flex-end;align-items:center;padding:18px 0 0}
+.theme-btn{
+  border:1px solid rgba(37,99,235,.14)!important;
+  background:#fff!important;
+  color:var(--text)!important;
+  box-shadow:0 8px 18px rgba(15,23,42,.05);
+  border-radius:12px!important
+}
+.register-shell{
+  min-height:calc(100vh - 70px);
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:26px 16px 48px
+}
+.register-wrap{width:min(520px,100%);text-align:center}
+.logo-wrap{display:flex;justify-content:center;margin-bottom:26px}
+.logo-mark{font-size:2.2rem;font-weight:900;letter-spacing:.18em;color:#0f1b55;line-height:1}
+.logo-mark .plus{color:var(--blue);letter-spacing:0;margin-left:4px}
+.logo-sub{font-size:.82rem;font-weight:800;letter-spacing:.45em;color:var(--blue);text-transform:uppercase;margin-left:.45em}
+.register-title{margin:0 0 22px;font-size:2.05rem;font-weight:800;letter-spacing:-.03em;color:#111827}
+.field{margin-bottom:18px;text-align:left}
+.input-wrap{
+  position:relative;display:flex;align-items:center;background:rgba(255,255,255,.85);
+  border:1px solid var(--stroke);border-radius:10px;min-height:58px;overflow:hidden
+}
+.input-wrap:focus-within{
+  border-color:rgba(56,189,248,.58);
+  box-shadow:0 0 0 4px rgba(56,189,248,.10);
+  background:#fff
+}
+.input-icon{width:52px;display:grid;place-items:center;color:#64748b;flex:0 0 auto}
+.input-icon svg,.eye-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
+.input-wrap input{
+  flex:1;min-width:0;border:none;outline:none;background:transparent;color:var(--text);
+  font-size:1rem;padding:0 14px 0 0;min-height:58px
+}
+.input-wrap input::placeholder{color:#94a3b8;font-weight:500}
+.eye-btn{
+  width:52px;height:58px;border:none;background:transparent;color:#64748b;
+  display:grid;place-items:center;cursor:pointer;flex:0 0 auto
+}
+.register-btn{
+  width:100%;min-height:56px;border:none;border-radius:12px;
+  background:linear-gradient(180deg,#b0b0b0,#9e9e9e);color:#fff;font-size:1rem;
+  font-weight:800;cursor:pointer;transition:filter .2s ease,transform .2s ease
+}
+.register-btn:hover{filter:brightness(.98);transform:translateY(-1px)}
+.err,.ok{
+  margin-top:14px;font-weight:700;white-space:pre-wrap;text-align:left;
+  border-radius:12px;padding:12px 14px
+}
+.err{color:#dc2626;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.16)}
+.ok{color:#15803d;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.16)}
+.bottom-text{margin-top:86px;color:#1f2937;font-size:1rem;line-height:1.6}
+.bottom-text a,.helper-links a{color:#1d4ed8;text-decoration:none}
+.helper-links{margin-top:10px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:.94rem}
+.helper-links a{color:#64748b;font-weight:600}
+@media (max-width:560px){
+  .app-header .row{padding-top:14px}
+  .register-shell{padding:18px 14px 34px}
+  .logo-wrap{margin-bottom:22px}
+  .logo-mark{font-size:1.8rem;letter-spacing:.14em}
+  .logo-sub{font-size:.72rem;letter-spacing:.34em}
+  .register-title{font-size:1.75rem;margin-bottom:18px}
+  .bottom-text{margin-top:56px;font-size:.96rem}
+}
+</style>
+
+<script id="pasir-theme-init">
+(function(){
+  try{
+    var saved = localStorage.getItem('pasir-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+  }catch(e){
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+})();
+</script>
+
+<style id="pasir-common-dark-fix">
+html[data-theme="dark"] body,
+body[data-theme="dark"]{
+  background:#0b1220 !important;
+  color:#f9fafb !important;
+}
+
+html[data-theme="dark"] body *,
+body[data-theme="dark"] *{
+  scrollbar-color:#475569 #0f172a;
+}
+
+body[data-theme="dark"] .muted,
+body[data-theme="dark"] .sub,
+body[data-theme="dark"] p,
+body[data-theme="dark"] small,
+body[data-theme="dark"] .desc,
+body[data-theme="dark"] .helper-links a,
+body[data-theme="dark"] .bottom-text,
+body[data-theme="dark"] .course-sub,
+body[data-theme="dark"] .progress-meta,
+body[data-theme="dark"] .curriculum-h .sub,
+body[data-theme="dark"] #countMods{
+  color:#94a3b8 !important;
+}
+
+body[data-theme="dark"] h1,
+body[data-theme="dark"] h2,
+body[data-theme="dark"] h3,
+body[data-theme="dark"] h4,
+body[data-theme="dark"] .title,
+body[data-theme="dark"] .register-title,
+body[data-theme="dark"] .login-title,
+body[data-theme="dark"] #courseTitle,
+body[data-theme="dark"] .course-title,
+body[data-theme="dark"] .brand,
+body[data-theme="dark"] .brand h1,
+body[data-theme="dark"] .brand-title,
+body[data-theme="dark"] .hero h1,
+body[data-theme="dark"] .hero h2,
+body[data-theme="dark"] .hero-copy,
+body[data-theme="dark"] .benefit-detail h3,
+body[data-theme="dark"] .price .normal-label,
+body[data-theme="dark"] .price .was{
+  color:#f8fafc !important;
+}
+
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .hero,
+body[data-theme="dark"] .section,
+body[data-theme="dark"] .section-head,
+body[data-theme="dark"] .bundle,
+body[data-theme="dark"] .how,
+body[data-theme="dark"] .curriculum,
+body[data-theme="dark"] .player-meta,
+body[data-theme="dark"] .curriculum-h,
+body[data-theme="dark"] .player-wrap,
+body[data-theme="dark"] .course,
+body[data-theme="dark"] .course-card,
+body[data-theme="dark"] .user-dropdown,
+body[data-theme="dark"] .currency-pop,
+body[data-theme="dark"] .currency-select,
+body[data-theme="dark"] .iconbtn,
+body[data-theme="dark"] .toggle,
+body[data-theme="dark"] .theme-btn,
+body[data-theme="dark"] .user-trigger,
+body[data-theme="dark"] .input-wrap,
+body[data-theme="dark"] .product-info,
+body[data-theme="dark"] .payment-container,
+body[data-theme="dark"] .method-details{
+  background:#0f172a !important;
+  color:#f8fafc !important;
+  border-color:rgba(148,163,184,.22) !important;
+}
+
+body[data-theme="dark"] .input-wrap input,
+body[data-theme="dark"] .eye-btn,
+body[data-theme="dark"] .currency-select{
+  background:#0f172a !important;
+  color:#f8fafc !important;
+}
+
+body[data-theme="dark"] .input-wrap input::placeholder{
+  color:#94a3b8 !important;
+}
+
+body[data-theme="dark"] .btn.secondary,
+body[data-theme="dark"] .btn.ghost,
+body[data-theme="dark"] .topbtn.secondary,
+body[data-theme="dark"] .smallbtn{
+  background:#162033 !important;
+  color:#e2e8f0 !important;
+  border-color:rgba(148,163,184,.22) !important;
+}
+
+body[data-theme="dark"] .tag,
+body[data-theme="dark"] .chip,
+body[data-theme="dark"] .pill,
+body[data-theme="dark"] #courseProgressBadge,
+body[data-theme="dark"] .course-badge{
+  background:rgba(56,189,248,.14) !important;
+  color:#bfdbfe !important;
+  border-color:rgba(56,189,248,.24) !important;
+}
+
+body[data-theme="dark"] .price-current,
+body[data-theme="dark"] .price .now,
+body[data-theme="dark"] .bundle-price,
+body[data-theme="dark"] .logicsoft-plan-price .now{
+  color:#86efac !important;
+}
+
+body[data-theme="dark"] .price-normal,
+body[data-theme="dark"] .price-normal-label{
+  color:#cbd5e1 !important;
+}
+
+body[data-theme="dark"] .section::before{
+  opacity:.9;
+}
+
+body[data-theme="dark"] .hero .chip,
+body[data-theme="dark"] .hero .tag,
+body[data-theme="dark"] .hero .hero-badge{
+  background:rgba(56,189,248,.14) !important;
+  color:#bfdbfe !important;
+  border-color:rgba(56,189,248,.24) !important;
+}
+
+body[data-theme="dark"] .course-thumb,
+body[data-theme="dark"] .thumb,
+body[data-theme="dark"] .mod .thumb{
+  background:#111827 !important;
+}
+
+body[data-theme="dark"] .whatsapp-float-label{
+  background:#f8fafc !important;
+  color:#0f172a !important;
+}
+</style>
+
+<style id="pasir-register-dark-fix">
+body[data-theme="dark"] .logo-mark{color:#e2e8f0 !important}
+body[data-theme="dark"] .register-title{color:#f8fafc !important}
+body[data-theme="dark"] .logo-sub{color:#7dd3fc !important}
+body[data-theme="dark"] .bottom-text a,
+body[data-theme="dark"] .helper-links a{color:#93c5fd !important}
+body[data-theme="dark"] .theme-btn{background:#0f172a !important;color:#f8fafc !important}
+body[data-theme="dark"] .input-wrap:focus-within{
+  border-color:#38bdf8 !important;
+  box-shadow:none !important;
+}
+</style>
+
+
+<style>
+.logo-mark{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.bolt-icon{
+  width:20px;
+  height:20px;
+  fill:#38bdf8;
+}
+body[data-theme="dark"] .bolt-icon{
+  fill:#7dd3fc;
+}
+</style>
+
+</head>
+<body>
+<header class="app-header">
+  <div class="container">
+    <div class="row">
+      <div class="nav-actions">
+        <button class="btn theme-btn" id="theme-toggle" type="button" aria-label="Cambiar tema">
+          <span id="theme-icon">☀️</span>
+          <span id="theme-label" class="sr-only">Modo claro</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="register-shell">
+  <div class="register-wrap">
+    <div class="logo-wrap">
+      <div class="logo-box" aria-label="Pasir Academy">
+        <div class="logo-mark">PASIR<span class="plus">🗲</span></div>
+        <div class="logo-sub">Escuela</div>
+      </div>
+    </div>
+
+    <section class="register-card">
+      <h1 class="register-title">Crear cuenta</h1>
+
+      <div class="field">
+        <div class="input-wrap">
+          <div class="input-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.33 0-6 1.79-6 4v1h12v-1c0-2.21-2.67-4-6-4Z"/></svg>
+          </div>
+          <input id="name" type="text" placeholder="Tu nombre completo" autocomplete="name" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="input-wrap">
+          <div class="input-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 7h16v10H4z"/><path d="m4 8 8 6 8-6"/></svg>
+          </div>
+          <input id="email" type="email" placeholder="tucorreo@gmail.com" autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="input-wrap">
+          <div class="input-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 1 1 10 0v3M6 11h12v9H6z"/><circle cx="12" cy="15.5" r="1.2"/></svg>
+          </div>
+          <input id="pass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+          <button class="eye-btn" type="button" id="togglePass" aria-label="Mostrar contraseña">
+            <svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button id="btn" class="register-btn">Crear cuenta</button>
+      <div id="msg" class="err" style="display:none"></div>
+      <div id="ok" class="ok" style="display:none"></div>
+
+      <div class="bottom-text">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></div>
+      <div class="helper-links"><a href="index.html">Volver al inicio</a></div>
+    </section>
+  </div>
+</main>
+
+<script>
+const API_URL = "https://pasir-proxy.vercel.app/api";
+
+function jsonp(action, payload) {
+  return new Promise((resolve, reject) => {
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const params = new URLSearchParams();
+    params.set("action", action);
+    Object.entries(payload || {}).forEach(([k,v]) => {
+      if (v === undefined || v === null) return;
+      params.set(k, String(v));
+    });
+    params.set("callback", cb);
+
+    const script = document.createElement("script");
+    script.src = API_URL + "?" + params.toString();
+    script.async = true;
+
+    window[cb] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    function cleanup() {
+      try { delete window[cb]; } catch(e) { window[cb] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("No se pudo conectar (JSONP/CORS)."));
+    };
+
+    document.body.appendChild(script);
+  });
+}
+
+function showErr(text) {
+  document.getElementById("ok").style.display = "none";
+  const el = document.getElementById("msg");
+  el.style.display = "block";
+  el.textContent = text;
+}
+
+function showOk(text) {
+  document.getElementById("msg").style.display = "none";
+  const el = document.getElementById("ok");
+  el.style.display = "block";
+  el.textContent = text;
+}
+
+document.getElementById("togglePass").onclick = () => {
+  const input = document.getElementById("pass");
+  input.type = input.type === "password" ? "text" : "password";
+};
+
+document.getElementById("btn").onclick = async () => {
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("pass").value;
+
+  if (!email || !password) return showErr("Correo y contraseña son requeridos.");
+
+  try {
+    const r = await jsonp("register", { name, email, password });
+    if (!r.ok) return showErr(r.error || "No se pudo registrar");
+
+    showOk("Cuenta creada. Ahora inicia sesión.");
+    setTimeout(()=> location.href = "login.html", 800);
+  } catch (e) {
+    showErr(e.message);
+  }
+};
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
