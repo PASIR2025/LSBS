@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pasir Editor</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="application-name" content="Pasir Editor">
+<meta name="apple-mobile-web-app-title" content="Pasir Editor">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar compact-topbar">
+    <div class="topbar-scroll compact-ribbon">
+      <div class="topbar-group main-group compact-group">
+        <button id="libraryBtn" type="button" title="Biblioteca EVC">📚 <span class="btn-text">Biblioteca</span> <span id="libraryCount">0</span></button>
+        <button id="newProjectBtn" type="button" title="Nuevo proyecto">＋ <span class="btn-text">Nuevo</span></button>
+        <button id="saveProjectBtn" title="Guardar proyecto .pasir">💾 <span class="btn-text">Guardar</span></button>
+        <button id="openProjectBtn" title="Abrir proyecto">📂 <span class="btn-text">Abrir</span></button>
+        <input id="projectInput" type="file" accept=".pasir,.evd,.json" hidden>
+      </div>
+
+      <div class="topbar-group compact-group quick-tools">
+        <button id="selectMode" class="active" title="Mover / seleccionar / pan en área vacía">↖ <span class="btn-text">Mover</span></button>
+        <button id="multiSelectBtn" type="button" title="Selección múltiple: toca varios elementos o cables">☑ <span class="btn-text">Multi</span></button>
+        <button id="wireMode" title="Conectar cable">⚡ <span class="btn-text">Cable</span></button>
+        <button id="undoBtn" type="button" title="Atrás / deshacer">↶</button>
+        <button id="redoBtn" type="button" title="Adelante / rehacer">↷</button>
+        <button id="deleteBtn" title="Eliminar selección">🗑️</button>
+        <button id="snapToggleBtn" type="button" class="active" title="Activar/desactivar Snap">🧲 <span class="btn-text">Snap</span></button>
+      </div>
+
+      <details class="topbar-menu">
+        <summary title="Herramientas de cable">⚡ <span>Cable</span></summary>
+        <div class="menu-panel wire-tools">
+          <label>Calibre
+            <select id="wireGaugeSelect">
+              <option value="0.5mm2">0.5 mm2</option>
+              <option value="1mm2" selected>1 mm2</option>
+              <option value="1.5mm2">1.5 mm2</option>
+              <option value="2.5mm2">2.5 mm2</option>
+              <option value="4mm2">4 mm2</option>
+              <option value="awg18">#18 AWG</option>
+              <option value="awg16">#16 AWG</option>
+              <option value="awg14">#14 AWG</option>
+              <option value="awg12">#12 AWG</option>
+            </select>
+          </label>
+          <label class="legacy-thickness"><input type="radio" name="wireThickness" value="thin" checked> Delgado</label>
+          <label class="legacy-thickness"><input type="radio" name="wireThickness" value="thick"> Grueso</label>
+          <label>Color cable
+            <select id="wireColorSelect">
+              <option value="#ffffff">Blanco</option>
+              <option value="#2563eb" selected>Azul</option>
+              <option value="#111827">Negro</option>
+              <option value="#ef4444">Rojo</option>
+              <option value="#8b5a2b">Marrón</option>
+              <option value="#38bdf8">Celeste</option>
+              <option value="#6b7280">Plomo</option>
+              <option value="green-yellow">Verde/Amarillo tierra</option>
+              <option value="custom">Personalizado</option>
+            </select>
+          </label>
+          <label class="custom-color">Color libre <input id="wireColorPicker" type="color" value="#2563eb"></label>
+          <label>Terminal
+            <select id="wireTerminalSelect">
+              <option value="dot">Punto / borne</option>
+              <option value="ring">Ojal</option>
+              <option value="ferrule" selected>Puntera / férula visible</option>
+              <option value="fork">Horquilla</option>
+              <option value="none">Sin terminal</option>
+            </select>
+          </label>
+          <label>Color terminal
+            <select id="terminalColorSelect">
+              <option value="#8b5a2b">Marrón</option>
+              <option value="#6b7280">Plomo</option>
+              <option value="#111827">Negro</option>
+              <option value="#2563eb" selected>Azul</option>
+              <option value="#ef4444">Rojo</option>
+              <option value="#facc15">Amarillo</option>
+              <option value="#f97316">Naranja</option>
+            </select>
+          </label>
+          <div class="menu-row">
+            <button id="wireFreeBtn" type="button" class="active">Libre</button>
+            <button id="wireOrthoBtn" type="button">90°</button>
+          </div>
+          <div class="menu-row">
+            <button id="applyWireStyleBtn">Aplicar</button>
+            <button id="addNodeBtn" type="button">+ Nodo</button>
+            <button id="delNodeBtn" type="button">- Nodo</button>
+            <button id="clearWires">Borrar todos</button>
+          </div>
+        </div>
+      </details>
+
+      <details class="topbar-menu">
+        <summary title="Capas y orden visual">🗂️ <span>Capas</span></summary>
+        <div class="menu-panel layer-tools">
+          <button id="layerFrontTopBtn" type="button">Traer al frente</button>
+          <button id="layerBackTopBtn" type="button">Enviar al fondo</button>
+          <button id="layerUpTopBtn" type="button">Subir capa</button>
+          <button id="layerDownTopBtn" type="button">Bajar capa</button>
+        </div>
+      </details>
+
+      <details class="topbar-menu">
+        <summary title="Etiquetas y rotulado">🏷️ <span>Etiquetas</span></summary>
+        <div class="menu-panel label-tools">
+          <button id="autoLabelWiresBtn" type="button">Numerar cables</button>
+          <button id="autoEndpointLabelsBtn" type="button">Rotular extremos</button>
+          <button id="autoDeviceRefsBtn" type="button">Numerar dispositivos</button>
+          <button id="toggleWireLabelsBtn" type="button" class="active">Etiquetas ON/OFF</button>
+        </div>
+      </details>
+
+      <details class="topbar-menu">
+        <summary title="Tablero y escala técnica">📐 <span>Tablero</span></summary>
+        <div class="menu-panel board-tools scale-tools wide-panel">
+          <label>1 mm = <input id="pxPerMmInput" type="number" min="0.2" max="20" step="0.1" value="2"> px</label>
+          <button id="applyScaleBtn" type="button">Aplicar escala</button>
+          <button id="unitToggleBtn" type="button" class="active">Medidas: mm</button>
+          <label>Ancho <input id="boardWidthMmInput" type="number" min="100" max="3000" step="10" value="800"> mm</label>
+          <label>Alto <input id="boardHeightMmInput" type="number" min="100" max="3000" step="10" value="1200"> mm</label>
+          <button id="applyBoardBtn" type="button">Aplicar tablero</button>
+          <button id="fitBoardBtn" type="button">Ajustar a pantalla</button>
+        </div>
+      </details>
+
+      <details class="topbar-menu">
+        <summary title="Documentación y exportación">📄 <span>Doc</span></summary>
+        <div class="menu-panel export-tools">
+          <button id="exportPdfBtn" type="button">Exportar PDF</button>
+          <button id="exportSvgBtn" type="button">Exportar SVG</button>
+          <button id="exportBomBtn" type="button">BOM CSV</button>
+        </div>
+      </details>
+
+      <div class="topbar-group compact-group view-tools">
+        <button id="zoomOutBtn" type="button" title="Alejar">−</button>
+        <button id="zoomResetBtn" type="button" title="Zoom 100%">100%</button>
+        <button id="zoomInBtn" type="button" title="Acercar">+</button>
+      </div>
+
+      <details class="topbar-menu">
+        <summary title="Simulación">▶️ <span>Sim</span></summary>
+        <div class="menu-panel">
+          <button id="simulateBtn" type="button">Simular</button>
+          <button id="clearSimBtn" type="button">Limpiar simulación</button>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <aside class="sidebar library-drawer" id="libraryDrawer">
+    <div class="drawer-header">
+      <div>
+        <h1>Biblioteca EVC</h1>
+        <p class="hint">Carga archivos o carpetas .evc. Toca un componente y luego toca el tablero para insertarlo.</p>
+      </div>
+      <button id="closeLibraryBtn" type="button" class="icon-btn">×</button>
+    </div>
+    <div class="library-load-actions">
+      <label class="file-load-button">Cargar EVC<input id="evcInput" type="file" accept=".evc" multiple hidden></label>
+      <label class="file-load-button">Cargar carpeta<input id="evcFolderInput" type="file" accept=".evc" multiple webkitdirectory directory hidden></label>
+    </div>
+    <div class="hint small">Los componentes quedan guardados. Si cargas una carpeta, se ordenan según sus subcarpetas.</div>
+    <div id="libraryList" class="library-list"></div>
+  </aside>
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+
+  <main class="workspace" id="workspace">
+    <div id="viewport">
+      <div id="boardBackground"></div>
+      <div id="canvas"></div>
+      <svg id="wires"></svg>
+    </div>
+
+    <aside class="inspector" id="inspector">
+      <div class="inspector-header"><span class="inspector-header-title">PROPIEDADES</span><button id="inspectorToggle" class="inspector-toggle" type="button" title="Contraer / expandir panel">▸</button></div>
+      <div id="inspectorContent" class="inspector-content">
+        <p class="muted">Selecciona un componente o un cable</p>
+      </div>
+    </aside>
+
+    <div class="status" id="status">Modo: mover</div>
+  </main>
+</div>
+  <div id="saveProjectModal" class="modal-backdrop" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="saveProjectTitle">
+      <h2 id="saveProjectTitle">Guardar proyecto Pasir</h2>
+      <p>Escribe el nombre del proyecto. Se guardará con extensión <strong>.pasir</strong>.</p>
+      <label>Nombre del archivo
+        <input id="projectNameInput" type="text" value="proyecto" autocomplete="off">
+      </label>
+      <div class="modal-actions">
+        <button id="cancelSaveProjectBtn" type="button" class="secondary">Cancelar</button>
+        <button id="confirmSaveProjectBtn" type="button">Guardar .pasir</button>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
