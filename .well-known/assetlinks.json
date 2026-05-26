@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "io.github.pasir2025.twa",
-        "sha256_cert_fingerprints": ["0C:41:57:F4:9D:DF:76:91:9B:62:B3:0D:00:71:29:26:BE:BB:5C:5E:6F:81:3C:11:C1:78:25:E7:85:D2:27:E0"]
+        "sha256_cert_fingerprints": ["56:CD:AB:04:25:C7:24:24:1A:5A:24:19:64:6D:FA:08:23:80:2E:60:A3:FD:12:4B:91:4B:7C:9F:8F:39:DE:D5"]
       }
     }]
