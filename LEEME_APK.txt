@@ -1,0 +1,14 @@
+SIMUPLC LAB - BASE APK / PWA
+
+Cambios realizados:
+1. index(3).html renombrado a index.html.
+2. ladder_mobile_compact(1).html renombrado a ladder_mobile_compact.html.
+3. service-worker.js y sw.js actualizados a cache v6.
+4. Se agregó ./index.html al cache offline.
+5. Se agregó bloqueo básico contra copia de licencia entre dispositivos.
+6. Se agregó detección básica de cambio de fecha hacia atrás para vencimiento offline.
+
+Importante:
+- Esto mejora la seguridad, pero HTML/JS nunca es 100% inviolable.
+- Para APK comercial, el siguiente paso es TWA/Bubblewrap + ofuscación + licencia firmada/servidor.
+- No vendas la versión HTML directa como premium.
