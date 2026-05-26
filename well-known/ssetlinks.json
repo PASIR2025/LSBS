@@ -1,8 +1,0 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.pasir2025.twa",
-        "sha256_cert_fingerprints": ["0C:41:57:F4:9D:DF:76:91:9B:62:B3:0D:00:71:29:26:BE:BB:5C:5E:6F:81:3C:11:C1:78:25:E7:85:D2:27:E0"]
-      }
-    }]
